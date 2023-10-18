@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'com.japco.tablerototal'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.japco.tablerototal"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TableroTotal</string>
+    <string name="title_home">Play</string>
+    <string name="title_record">Record</string>
+    <string name="title_friends">Friends</string>
+</resources>
