@@ -4,4 +4,16 @@
     <string name="title_home">Jugar</string>
     <string name="title_record">Historial</string>
     <string name="title_friends">Amigos</string>
+    <string name="home_title">Juega en Linea</string>
+    <string name="username_field">Your name</string>
+    <string name="username_label">Player\'s nickname</string>
+    <string name="button_join_game">Join Game</string>
+    <string name="button_create_game">Create Game</string>
+    <string name="no_connection_dialog_message">Device has no Internet connection. You must be connected to play online.</string>
+    <string name="no_nickname_dialog_message">Please enter a nickname</string>
+    <string name="game_code">Game Code</string>
+    <string name="join_game">Join</string>
+    <string name="no_code_dialog_message">Please enter a valid game code.</string>
+    <string name="title_activity_rpsgame">Rock, Paper, Scissors</string>
+    <string name="join_error_message">Could not join game. Please try again later.</string>
 </resources>

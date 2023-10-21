@@ -1,64 +1,77 @@
 package com.japco.tablerototal;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.japco.tablerototal.util.Connection;
+import com.japco.tablerototal.util.Dialogs;
+
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private EditText editUsername;
+    private Button createGameButton;
+    private Button joinGameButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        editUsername = view.findViewById(R.id.homeNameField);
+        createGameButton = view.findViewById(R.id.buttonCreateGame);
+        joinGameButton = view.findViewById(R.id.buttonJoinGame);
+
+        createGameButton.setOnClickListener(v -> {
+            if (!validate()) return;
+            Log.i("Navigation","Redirecting to create game.");
+            // TODO: Descomentar al terminar la activiy de crear juego
+            // Intent intent = new Intent(v.getContext(), CreateGameActivity.class);
+            // intent.putExtra("username", editUsername.getText().toString().trim());
+            // startActivity(intent);
+
+            // TODO: Eliminar al hacer lo anterior
+            Toast.makeText(view.getContext(), "Creando partida. (Esto no deberia verse!!!)", Toast.LENGTH_LONG).show();
+        });
+
+        joinGameButton.setOnClickListener(v -> {
+            if (!validate()) return;
+            Log.i("Navigation","Redirecting to join game.");
+            Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
+            intent.putExtra(Constants.USERNAME_EXTRA, editUsername.getText().toString().trim());
+            startActivity(intent);
+
+            // Toast.makeText(view.getContext(), "Uniendose a partida. (Esto no deberia verse!!!)", Toast.LENGTH_LONG).show();
+        });
+
+    }
+
+    private boolean validate() {
+        boolean hasConnection = new Connection(getActivity()).checkConnection();
+        if (!hasConnection) {
+            Dialogs.showInfoDialog(getActivity(), R.string.no_connection_dialog_message);
+            return false;
+        }
+
+        if (editUsername.getText().toString().trim().isEmpty()) {
+            Dialogs.showInfoDialog(getActivity(), R.string.no_nickname_dialog_message);
+            return false;
+        }
+        return true;
     }
 }
