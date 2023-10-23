@@ -16,4 +16,9 @@
     <string name="no_code_dialog_message">Please enter a valid game code.</string>
     <string name="title_activity_rpsgame">Rock, Paper, Scissors</string>
     <string name="join_error_message">Could not join game. Please try again later.</string>
+    <string name="game_date">23/10/2023</string>
+    <string name="game_title">Rock, Paper, Scissors</string>
+    <string name="winner">Winner: Pouchie07</string>
+    <string name="friend_name">leVeux98</string>
+    <string name="last_connection">Last connection: 24/12/2022 22:32</string>
 </resources>

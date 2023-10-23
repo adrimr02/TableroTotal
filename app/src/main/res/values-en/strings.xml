@@ -16,4 +16,9 @@
     <string name="no_code_dialog_message">Debes escribir un código de partida válido.</string>
     <string name="title_activity_rpsgame">Piedra, papel o tijera</string>
     <string name="join_error_message">Error al unirse a la partida. Intentalo más tarde.</string>
+    <string name="game_date">23/10/2023 9:30</string>
+    <string name="game_title">Piedra, papel o tijera</string>
+    <string name="winner">Ganador: Pouchie07</string>
+    <string name="friend_name">leVeux98</string>
+    <string name="last_connection">Ultima conexión: 24/12/2022 22:32</string>
 </resources>
