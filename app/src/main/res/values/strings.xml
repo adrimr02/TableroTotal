@@ -15,4 +15,6 @@
     <string name="no_code_dialog_message">Please enter a valid game code.</string>
     <string name="title_activity_rpsgame">Rock, paper, scissors</string>
     <string name="join_error_message">Could not join game. Please try again later.</string>
+    <string name="opponent">Oponente</string>
+
 </resources>
