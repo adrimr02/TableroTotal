@@ -121,11 +121,9 @@ public class JoinGameActivity extends AppCompatActivity {
         if (game.equals(Constants.GAMES[0])) {
             intent = new Intent(JoinGameActivity.this, RPSGameActivity.class);
         } else if (game.equals(Constants.GAMES[1])) {
-            // TODO Descomentar al crear la activity tres en raya
-            // intent = new Intent(JoinGameActivity.this, TTTGameActivity.class);
+            intent = new Intent(JoinGameActivity.this, TicTacToeActivity.class);
         } else if (game.equals(Constants.GAMES[2])) {
-            // TODO descomentar al crear la activity pares o nones
-            // intent = new Intent(JoinGameActivity.this, EvenOddGameActivity.class);
+            intent = new Intent(JoinGameActivity.this, EvensAndNonesActivity.class);
         } else {
             return;
         }

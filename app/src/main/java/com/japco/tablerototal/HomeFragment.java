@@ -40,12 +40,10 @@ public class HomeFragment extends Fragment {
         createGameButton.setOnClickListener(v -> {
             if (!validate()) return;
             Log.i("Navigation","Redirecting to create game.");
-            // TODO: Descomentar al terminar la activiy de crear juego
-            // Intent intent = new Intent(v.getContext(), CreateGameActivity.class);
-            // intent.putExtra("username", editUsername.getText().toString().trim());
-            // startActivity(intent);
+            Intent intent = new Intent(v.getContext(), NewGameActivity.class);
+            intent.putExtra("username", editUsername.getText().toString().trim());
+            startActivity(intent);
 
-            // TODO: Eliminar al hacer lo anterior
             Toast.makeText(view.getContext(), "Creando partida. (Esto no deberia verse!!!)", Toast.LENGTH_LONG).show();
         });
 

@@ -75,7 +75,7 @@ public class NewGameActivity extends AppCompatActivity {
     }
 
     private void connect(String roomCode, String username) {
-        socketService.getSocket().emit("new_game", new String[] { username, roomCode} , args -> {
+        socketService.getSocket().emit("create", new String[] { username, roomCode} , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError = false;
             String game = null;
@@ -107,10 +107,8 @@ public class NewGameActivity extends AppCompatActivity {
         if (game.equals(Constants.GAMES[0])) {
             intent = new Intent(NewGameActivity.this, RPSGameActivity.class);
         } else if (game.equals(Constants.GAMES[1])) {
-            // TODO Descomentar al crear la activity tres en raya
              intent = new Intent(NewGameActivity.this, TicTacToeActivity.class);
         } else if (game.equals(Constants.GAMES[2])) {
-            // TODO descomentar al crear la activity pares o nones
              intent = new Intent(NewGameActivity.this, EvensAndNonesActivity.class);
         } else {
             return;

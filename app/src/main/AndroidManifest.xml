@@ -21,6 +21,15 @@
             android:name=".RPSGameActivity"
             android:exported="false" />
         <activity
+            android:name=".EvensAndNonesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TicTacToeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewGameActivity"
+            android:exported="false" />
+        <activity
             android:name=".JoinGameActivity"
             android:exported="false" />
         <activity
