@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_row="3"
+    android:background="#435b5b"
+    android:padding="5dp"
+    tools:context=".RPSGameActivity">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Pares y Nones"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerNameEditText" />
+
+    <EditText
+        android:id="@+id/playerNameEditText"
+        android:layout_width="287dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:hint="Nombre del Jugador"
+        android:textAlignment="center"
+        android:textColor="#050505"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Oponente" />
+
+    <Button
+        android:id="@+id/abandonButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="244dp"
+        android:background="#dbdbdb"
+        android:text="Abandonar"
+        android:textColor="#131313"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/paresyNones"
+        android:layout_width="278dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="72dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+
+        <Button
+            android:id="@+id/botonPares"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:background="#dbdbdb"
+            android:text="Pares"
+            android:textColor="#0E0E0E" />
+
+        <Button
+            android:id="@+id/botonNones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#dbdbdb"
+            android:text="Nones"
+            android:textColor="#0E0E0E" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/turnTextView"
+        android:layout_width="162dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="196dp"
+        android:background="#dbdbdb"
+        android:gravity="center"
+        android:text="Tú Turno"
+        android:textAlignment="center"
+        android:textColor="#100F0F"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paresyNones"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/Oponente"
+        android:layout_width="131dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="104dp"
+        android:gravity="center"
+        android:text="@string/opponent"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/roundsTextView"
+        android:layout_width="108dp"
+        android:layout_height="44dp"
+        android:background="#DF4E44"
+        android:gravity="center"
+        android:text="Rondas: 0"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.908"
+        app:layout_constraintStart_toEndOf="@+id/abandonButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.03" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
