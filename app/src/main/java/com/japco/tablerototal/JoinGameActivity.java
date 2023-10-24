@@ -94,20 +94,27 @@ public class JoinGameActivity extends AppCompatActivity {
             boolean isError = false;
             String game = null;
             try {
-                String status = response.getString("status");
-                game = response.getString("game");
-
-                isError = !status.equals("ok");
-                isError |= !Arrays.asList(Constants.GAMES).contains(game);
+                String status = response.getString(Constants.RESPONSE_STATUS);
+                if (!status.equals(Constants.STATUS_OK)) {
+                    isError = true;
+                } else {
+                    game = response.getJSONObject(Constants.GameOptions.GAME_OPTIONS).getString(Constants.GameOptions.GAME);
+                    isError = !Arrays.asList(Constants.GAMES).contains(game);
+                }
             } catch (JSONException e) {
                 isError = true;
             }
 
             if (isError) {
-                Dialogs.showInfoDialog(JoinGameActivity.this, R.string.join_error_message, (DialogInterface dialog, int id) -> {
-                    dialog.dismiss();
-                    Intent intent = new Intent(JoinGameActivity.this, MainActivity.class);
-                    startActivity(intent);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Dialogs.showInfoDialog(JoinGameActivity.this, R.string.join_error_message, (DialogInterface dialog, int id) -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(JoinGameActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        });
+                    }
                 });
             } else {
                 enterGameView(game, socketService);

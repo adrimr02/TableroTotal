@@ -7,10 +7,11 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 
+import com.japco.tablerototal.Constants;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import io.socket.client.IO;
 import io.socket.client.Manager;
 import io.socket.client.Socket;
 
@@ -26,7 +27,7 @@ public class SocketService extends Service {
     @Override
     public void onCreate() {
         try {
-            Manager manager = new Manager(new URI("http://10.0.2.2"));
+            Manager manager = new Manager(new URI(Constants.SERVER_URL));
             mSocket = manager.socket("/play");
             mSocket.connect();
         } catch (URISyntaxException e) {}
