@@ -21,4 +21,9 @@
     <string name="winner">Ganador: Pouchie07</string>
     <string name="friend_name">leVeux98</string>
     <string name="last_connection">Ultima conexión: 24/12/2022 22:32</string>
+    <string name="button_leave">Abandonar</string>
+    <string name="rock">Piedra</string>
+    <string name="paper">Papel</string>
+    <string name="scissors">Tijeras</string>
+    <string name="game_round">Ronda:</string>
 </resources>

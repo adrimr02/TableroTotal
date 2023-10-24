@@ -1,7 +1,5 @@
 package com.japco.tablerototal;
 
-import android.graphics.drawable.Icon;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +8,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.IconCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.japco.tablerototal.model.Match;
 
 import java.util.List;
 

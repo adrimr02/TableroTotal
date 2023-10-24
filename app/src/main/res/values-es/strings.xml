@@ -21,4 +21,9 @@
     <string name="winner">Winner: Pouchie07</string>
     <string name="friend_name">leVeux98</string>
     <string name="last_connection">Last connection: 24/12/2022 22:32</string>
+    <string name="button_leave">Leave game</string>
+    <string name="rock">Rock</string>
+    <string name="paper">Paper</string>
+    <string name="scissors">Scissors</string>
+    <string name="game_round">Round:</string>
 </resources>

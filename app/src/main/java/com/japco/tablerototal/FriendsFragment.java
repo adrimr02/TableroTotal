@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.japco.tablerototal.model.Friend;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,9 +59,9 @@ public class FriendsFragment extends Fragment {
 
     private void fillMatchList(){
         friendsList = new ArrayList<Friend>();
-        friendsList.add(new Friend("Reih1", "15/10/2023 12:21"));
-        friendsList.add(new Friend("SamuDestroyer","23/10/2023 12:34"));
-        friendsList.add(new Friend("GodAtarash1", "21/10/2023 19:33"));
-        friendsList.add(new Friend("Depredador07", "24/10/2023 10:07"));
+        friendsList.add(new Friend("Reih1", "15/10/2023 12:21", null));
+        friendsList.add(new Friend("SamuDestroyer","23/10/2023 12:34", null));
+        friendsList.add(new Friend("GodAtarash1", "21/10/2023 19:33", null));
+        friendsList.add(new Friend("Depredador07", "24/10/2023 10:07", null));
     }
 }

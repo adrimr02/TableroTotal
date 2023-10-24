@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
