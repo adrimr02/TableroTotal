@@ -1,8 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TableroTotal</string>
-    <string name="title_home">Jugar</string>
-    <string name="title_record">Historial</string>
-    <string name="title_friends">Amigos</string>
+    <string name="title_home">Play</string>
+    <string name="title_record">Record</string>
+    <string name="title_friends">Friends</string>
     <string name="home_title">Play Online</string>
     <string name="username_field">Your name</string>
     <string name="username_label">Player\'s nickname</string>
@@ -13,7 +14,7 @@
     <string name="game_code">Game Code</string>
     <string name="join_game">Join</string>
     <string name="no_code_dialog_message">Please enter a valid game code.</string>
-    <string name="title_activity_rpsgame">Rock, paper, scissors</string>
+    <string name="title_activity_rpsgame">Rock, Paper, Scissors</string>
     <string name="join_error_message">Could not join game. Please try again later.</string>
     <string name="new_game_error_message">Could not create game. Please try again later.</string>
     <string name="opponent">Opponent</string>
@@ -22,12 +23,11 @@
     <string name="TicTacToe">TicTacToe</string>
     <string name="RPS">Rock, Paper, Scissors</string>
     <string name="EvensAndNones">Odds and Evens</string>
-
     <string name="game_date">23/10/2023</string>
     <string name="game_title">Rock, Paper, Scissors</string>
     <string name="winner">Winner: Pouchie07</string>
     <string name="friend_name">leVeux98</string>
-    <string name="last_connection">Last connection : 24/12/2022 22:32</string>
+    <string name="last_connection">Last connection: 24/12/2022 22:32</string>
     <string name="button_leave">Leave game</string>
     <string name="rock">Rock</string>
     <string name="paper">Paper</string>
