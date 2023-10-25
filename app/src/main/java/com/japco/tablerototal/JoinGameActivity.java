@@ -89,7 +89,7 @@ public class JoinGameActivity extends AppCompatActivity {
     }
 
     private void connect(String roomCode, String username) {
-        socketService.getSocket().emit("join", new String[] { username, roomCode} , args -> {
+        socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new String[] { username, roomCode} , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError = false;
             String game = null;

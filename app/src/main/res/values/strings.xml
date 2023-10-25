@@ -16,12 +16,12 @@
     <string name="title_activity_rpsgame">Rock, paper, scissors</string>
     <string name="join_error_message">Could not join game. Please try again later.</string>
     <string name="new_game_error_message">Could not create game. Please try again later.</string>
-    <string name="opponent">Oponente</string>
+    <string name="opponent">Opponent</string>
     <string name="newGame">New Game</string>
-    <string name="Back">Back\n</string>
+    <string name="go_back">Back</string>
     <string name="TicTacToe">TicTacToe</string>
     <string name="RPS">Rock, Paper, Scissors</string>
-    <string name="EvensAndNones">Evens and nones</string>
+    <string name="EvensAndNones">Odds and Evens</string>
 
     <string name="game_date">23/10/2023</string>
     <string name="game_title">Rock, Paper, Scissors</string>
@@ -33,4 +33,6 @@
     <string name="paper">Paper</string>
     <string name="scissors">Scissors</string>
     <string name="game_round">Round:</string>
+    <string name="round_selection">Rounds: %d</string>
+    <string name="game_created">New game created!\\nRoom code: %s</string>
 </resources>

@@ -43,8 +43,6 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(v.getContext(), NewGameActivity.class);
             intent.putExtra("username", editUsername.getText().toString().trim());
             startActivity(intent);
-
-            Toast.makeText(view.getContext(), "Creando partida. (Esto no deberia verse!!!)", Toast.LENGTH_LONG).show();
         });
 
         joinGameButton.setOnClickListener(v -> {
@@ -53,8 +51,6 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
             intent.putExtra(Constants.USERNAME_EXTRA, editUsername.getText().toString().trim());
             startActivity(intent);
-
-            // Toast.makeText(view.getContext(), "Uniendose a partida. (Esto no deberia verse!!!)", Toast.LENGTH_LONG).show();
         });
 
     }

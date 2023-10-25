@@ -15,7 +15,14 @@
     <string name="join_game">Unirse</string>
     <string name="no_code_dialog_message">Debes escribir un código de partida válido.</string>
     <string name="title_activity_rpsgame">Piedra, papel o tijera</string>
-    <string name="join_error_message">Error al unirse a la partida. Intentalo más tarde.</string>
+    <string name="join_error_message">Error al unirse a la partida. Inténtalo más tarde.</string>
+    <string name="new_game_error_message">Error al crear el juego. Inténtalo mas tarde.</string>
+    <string name="opponent">Oponente</string>
+    <string name="newGame">Nuevo juego</string>
+    <string name="go_back">Atras</string>
+    <string name="TicTacToe">Tres en Raya</string>
+    <string name="RPS">Piedra, papel o tijera</string>
+    <string name="EvensAndNones">Pares o Nones</string>
     <string name="game_date">23/10/2023 9:30</string>
     <string name="game_title">Piedra, papel o tijera</string>
     <string name="winner">Ganador: Pouchie07</string>
@@ -26,4 +33,6 @@
     <string name="paper">Papel</string>
     <string name="scissors">Tijeras</string>
     <string name="game_round">Ronda:</string>
+    <string name="round_selection">Rondas: %d</string>
+    <string name="game_created">Partida creada!\\Codigo: %s</string>
 </resources>

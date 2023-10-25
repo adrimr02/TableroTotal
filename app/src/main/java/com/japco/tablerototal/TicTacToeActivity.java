@@ -9,6 +9,7 @@ import android.os.IBinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
 public class TicTacToeActivity extends AppCompatActivity {
@@ -37,6 +38,8 @@ public class TicTacToeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tresenraya);
+        String roomCode = getIntent().getStringExtra("roomCode");
+        Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
     }
 
     @Override

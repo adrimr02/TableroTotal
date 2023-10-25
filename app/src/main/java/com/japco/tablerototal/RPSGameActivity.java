@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
 public class RPSGameActivity extends AppCompatActivity {
@@ -37,6 +38,8 @@ public class RPSGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rpsgame);
+        String roomCode = getIntent().getStringExtra("roomCode");
+        Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
     }
 
     @Override

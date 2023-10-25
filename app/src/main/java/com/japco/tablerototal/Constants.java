@@ -10,8 +10,17 @@ public class Constants {
     public static final class GameOptions {
         public static final String GAME_OPTIONS = "gameOptions";
         public static final String GAME = "game";
-        public static final String PLAYERS = "players";
+        public static final String PLAYERS = "maxPlayers";
         public static final String ROUNDS = "rounds";
         public static final String TIMEOUT = "timeout";
+    }
+
+    public static final class ClientEvents {
+        public static final String JOIN_GAME = "join";
+        public static final String CREATE_GAME = "create";
+    }
+
+    public static final class ServerEvents {
+        /* v.g. game_start o game_end */
     }
 }

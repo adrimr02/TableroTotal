@@ -8,8 +8,12 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,13 +26,20 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class NewGameActivity extends AppCompatActivity {
-    private Button ticTacToeButton;
-    private Button rpsButton;
-    private Button evensAndNonesButton;
+    private ToggleButton ticTacToeButton;
+    private ToggleButton rpsButton;
+    private ToggleButton oddsEvensButton;
     private Button backButton;
+    private SeekBar roundsSeekBar;
+    private TextView roundsLabel;
+    private Button createGameButton;
 
     SocketService socketService;
     private boolean mBound;
+
+    private String username;
+    private String selectedGame = Constants.GAMES[1];
+    private int selectedRounds = 3;
 
     private ServiceConnection connection = new ServiceConnection() {
 
@@ -51,11 +62,38 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
+        username = getIntent().getStringExtra(Constants.USERNAME_EXTRA);
 
-        ticTacToeButton = findViewById(R.id.tictactoeButton);
+        ticTacToeButton = findViewById(R.id.ticTacToeButton);
         rpsButton = findViewById(R.id.RPSButton);
-        evensAndNonesButton = findViewById(R.id.EvensAndNonesButton);
+        oddsEvensButton = findViewById(R.id.oddsEvensButton);
         backButton = findViewById(R.id.buttonBack);
+        roundsSeekBar = findViewById(R.id.roundsSeekBar);
+        roundsSeekBar.setProgress(selectedRounds-1);
+        roundsLabel = findViewById(R.id.roundsLabel);
+        roundsLabel.setText(String.format(getString(R.string.round_selection), selectedRounds));
+        createGameButton = findViewById(R.id.buttonConfirmGame);
+
+        ticTacToeButton.setOnClickListener(v -> checkButton(ticTacToeButton));
+        rpsButton.setOnClickListener(v -> checkButton(rpsButton));
+        oddsEvensButton.setOnClickListener(v -> checkButton(oddsEvensButton));
+        roundsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                selectedRounds = progress + 1;
+                roundsLabel.setText(String.format(getString(R.string.round_selection), selectedRounds));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        createGameButton.setOnClickListener(v -> createGame());
 
     }
 
@@ -74,17 +112,58 @@ public class NewGameActivity extends AppCompatActivity {
         mBound = false;
     }
 
-    private void connect(String roomCode, String username) {
-        socketService.getSocket().emit("create", new String[] { username, roomCode} , args -> {
+    private void checkButton(ToggleButton checkedButton) {
+        if (!checkedButton.isChecked()) {
+            checkedButton.setChecked(true);
+            return;
+        }
+        if (checkedButton == ticTacToeButton) {
+            selectedGame = Constants.GAMES[1];
+            oddsEvensButton.setChecked(false);
+            rpsButton.setChecked(false);
+        } else if (checkedButton == rpsButton) {
+            selectedGame = Constants.GAMES[0];
+            oddsEvensButton.setChecked(false);
+            ticTacToeButton.setChecked(false);
+        } else if (checkedButton == oddsEvensButton) {
+            selectedGame = Constants.GAMES[2];
+            ticTacToeButton.setChecked(false);
+            rpsButton.setChecked(false);
+        }
+    }
+
+    private void createGame() {
+        if (selectedGame == null || !Arrays.asList(Constants.GAMES).contains(selectedGame))
+            return;
+
+        if (selectedRounds < 1 || selectedRounds > 5)
+            return;
+
+        JSONObject gameOptions = null;
+        try {
+            gameOptions = new JSONObject();
+            gameOptions.put(Constants.GameOptions.GAME, selectedGame);
+            gameOptions.put(Constants.GameOptions.ROUNDS, selectedRounds);
+            gameOptions.put(Constants.GameOptions.PLAYERS, selectedGame.equals(Constants.GAMES[2]) ? 8 : 2);
+            gameOptions.put(Constants.GameOptions.TIMEOUT, 10);
+        } catch (JSONException e) {
+            return;
+        }
+
+        socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new Object[] { username, gameOptions } , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError = false;
             String game = null;
+            String roomCode = null;
             try {
-                String status = response.getString("status");
-                game = response.getString("game");
-
-                isError = !status.equals("ok");
-                isError |= !Arrays.asList(Constants.GAMES).contains(game);
+                String status = response.getString(Constants.RESPONSE_STATUS);
+                if (!status.equals(Constants.STATUS_OK)) {
+                    isError = true;
+                } else {
+                    game = response.getJSONObject(Constants.GameOptions.GAME_OPTIONS).getString(Constants.GameOptions.GAME);
+                    roomCode = response.getString("roomCode");
+                    isError = !Arrays.asList(Constants.GAMES).contains(game);
+                }
             } catch (JSONException e) {
                 isError = true;
             }
@@ -96,20 +175,23 @@ public class NewGameActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
             } else {
-                enterGameView(game, socketService);
+                enterGameView(game, roomCode);
             }
         });
     }
 
-    private void enterGameView(String game, SocketService mSocket) {
+    private void enterGameView(String game, String roomCode) {
         Log.i("Create a new game", game);
         Intent intent = null;
         if (game.equals(Constants.GAMES[0])) {
             intent = new Intent(NewGameActivity.this, RPSGameActivity.class);
+            intent.putExtra("roomCode", roomCode);
         } else if (game.equals(Constants.GAMES[1])) {
              intent = new Intent(NewGameActivity.this, TicTacToeActivity.class);
+            intent.putExtra("roomCode", roomCode);
         } else if (game.equals(Constants.GAMES[2])) {
              intent = new Intent(NewGameActivity.this, EvensAndNonesActivity.class);
+            intent.putExtra("roomCode", roomCode);
         } else {
             return;
         }
