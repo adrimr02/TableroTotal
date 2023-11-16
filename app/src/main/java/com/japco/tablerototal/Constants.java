@@ -3,7 +3,7 @@ package com.japco.tablerototal;
 public class Constants {
     public static final String[] GAMES = new String[] { "rock_paper_scissors", "tic_tac_toe", "even_odd" };
     public static final String USERNAME_EXTRA = "username";
-    public static final String SERVER_URL = "http://10.0.2.2";
+    public static final String SERVER_URL = BuildConfig.SERVER_URL;
     public static final String STATUS_OK = "ok";
     public static final String STATUS_ERROR = "error";
     public static final String RESPONSE_STATUS = "status";

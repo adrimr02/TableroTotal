@@ -17,7 +17,7 @@ public class TicTacToeActivity extends AppCompatActivity {
     SocketService socketService;
     private boolean mBound;
 
-    private ServiceConnection connection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -39,7 +39,8 @@ public class TicTacToeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tresenraya);
         String roomCode = getIntent().getStringExtra("roomCode");
-        Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
+        if (roomCode != null)
+            Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
     }
 
     @Override
