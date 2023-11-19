@@ -35,4 +35,6 @@
     <string name="game_round">Round:</string>
     <string name="round_selection">Rounds: %d</string>
     <string name="game_created">New game created!\\nRoom code: %s</string>
+    <string name="txSalaDeEspera">Waiting Room</string>
+    <string name="btListo">Ready</string>
 </resources>

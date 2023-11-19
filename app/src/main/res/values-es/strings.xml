@@ -35,4 +35,6 @@
     <string name="game_round">Ronda:</string>
     <string name="round_selection">Rondas: %d</string>
     <string name="game_created">Partida creada!\\Codigo: %s</string>
+    <string name="txSalaDeEspera">Sala de Espera</string>
+    <string name="btListo">Listo</string>
 </resources>

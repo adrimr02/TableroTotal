@@ -8,9 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -175,23 +173,32 @@ public class NewGameActivity extends AppCompatActivity {
                     startActivity(intent);
                 });
             } else {
-                enterGameView(game, roomCode);
+                enterWaitingRoomView(game, roomCode);
             }
         });
     }
 
-    private void enterGameView(String game, String roomCode) {
+    private void enterWaitingRoomView(String game, String roomCode) {
         Log.i("Create a new game", game);
         Intent intent = null;
         if (game.equals(Constants.GAMES[0])) {
-            intent = new Intent(NewGameActivity.this, RPSGameActivity.class);
+//            intent = new Intent(NewGameActivity.this, RPSGameActivity.class);
+//            intent.putExtra("roomCode", roomCode)
+            intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
             intent.putExtra("roomCode", roomCode);
+            intent.putExtra("game", Constants.GAMES[0]);
         } else if (game.equals(Constants.GAMES[1])) {
-             intent = new Intent(NewGameActivity.this, TicTacToeActivity.class);
+//             intent = new Intent(NewGameActivity.this, TicTacToeActivity.class);
+//            intent.putExtra("roomCode", roomCode);
+            intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
             intent.putExtra("roomCode", roomCode);
+            intent.putExtra("game", Constants.GAMES[1]);
         } else if (game.equals(Constants.GAMES[2])) {
-             intent = new Intent(NewGameActivity.this, EvensAndNonesActivity.class);
+//             intent = new Intent(NewGameActivity.this, EvensAndNonesActivity.class);
+//            intent.putExtra("roomCode", roomCode);
+            intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
             intent.putExtra("roomCode", roomCode);
+            intent.putExtra("game", Constants.GAMES[2]);
         } else {
             return;
         }

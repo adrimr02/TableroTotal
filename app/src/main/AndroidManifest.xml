@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TableroTotal"
         tools:targetApi="31">
+        <activity
+            android:name=".WaitingRoomActivity"
+            android:exported="false" />
 
         <service android:name=".util.SocketService" />
 
