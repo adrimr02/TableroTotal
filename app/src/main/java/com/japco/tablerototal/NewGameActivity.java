@@ -171,11 +171,11 @@ public class NewGameActivity extends AppCompatActivity {
             }
 
             if (isError) {
-                Dialogs.showInfoDialog(NewGameActivity.this, R.string.new_game_error_message, (DialogInterface dialog, int id) -> {
+                runOnUiThread(() -> Dialogs.showInfoDialog(NewGameActivity.this, R.string.new_game_error_message, (DialogInterface dialog, int id) -> {
                     dialog.dismiss();
                     Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
                     startActivity(intent);
-                });
+                }));
             } else {
                 enterWaitingRoomView(game, roomCode);
             }
