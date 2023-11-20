@@ -37,4 +37,11 @@ public class Constants {
         public static final String FINISH_GAME = "finish_game";
 
     }
+
+    public static class Keys {
+        public static final String COUNTER = "counter";
+        public static final String PLAYERS = "players";
+        public static final String ID = "id";
+        public static final String USERNAME = "username";
+    }
 }
