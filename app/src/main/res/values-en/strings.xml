@@ -37,4 +37,6 @@
     <string name="game_created">New game created!\\nRoom code: %s</string>
     <string name="txSalaDeEspera">Waiting Room</string>
     <string name="btListo">Ready</string>
+    <string name="tiempo">The game will start in:</string>
+    <string name="codigo">ABCDEF</string>
 </resources>

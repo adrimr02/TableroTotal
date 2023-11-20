@@ -8,9 +8,9 @@
     tools:context=".WaitingRoomActivity">
 
     <Button
-        android:id="@+id/buttonBack2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btAtras"
+        android:layout_width="91dp"
+        android:layout_height="51dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/white"
         android:paddingLeft="12dp"
@@ -22,20 +22,22 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/txSalaDeEspera"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcylConnectedUsers"
-        android:layout_width="303dp"
-        android:layout_height="403dp"
+        android:layout_width="306dp"
+        android:layout_height="358dp"
         android:foregroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.707" />
 
     <TextView
         android:id="@+id/txSalaDeEspera"
@@ -43,13 +45,13 @@
         android:layout_height="wrap_content"
         android:text="@string/txSalaDeEspera"
         android:textColor="#FFFFFF"
-        android:textSize="34sp"
+        android:textSize="45sp"
         app:layout_constraintBottom_toTopOf="@+id/rcylConnectedUsers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.907" />
+        app:layout_constraintVertical_bias="0.741" />
 
     <Button
         android:id="@+id/btListo"
@@ -62,7 +64,63 @@
         app:iconTint="#5E2E2E"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rcylConnectedUsers" />
+        app:layout_constraintTop_toBottomOf="@+id/rcylConnectedUsers"
+        app:layout_constraintVertical_bias="0.358" />
+
+    <TextView
+        android:id="@+id/txContador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000s"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/txSalaDeEspera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.925" />
+
+    <TextView
+        android:id="@+id/txTiempo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tiempo"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/txContador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
+    <TextView
+        android:id="@+id/txCodigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/codigo"
+        android:textColor="#B88938"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/rcylConnectedUsers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txSalaDeEspera" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCompartir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="#F4F4F4"
+        app:layout_constraintBottom_toTopOf="@+id/txSalaDeEspera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.792"
+        app:layout_constraintStart_toEndOf="@+id/txTiempo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.166"
+        app:rippleColor="#7C2A2A"
+        app:srcCompat="@android:drawable/ic_menu_share" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

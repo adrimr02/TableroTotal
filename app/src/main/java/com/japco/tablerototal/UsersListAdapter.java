@@ -71,4 +71,8 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
             });
         }
     }
+
+    public void setUsersList(List<User> usersList) {
+        this.usersList = usersList;
+    }
 }

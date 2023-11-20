@@ -41,9 +41,6 @@ public class TicTacToeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tresenraya);
-        String roomCode = getIntent().getStringExtra("roomCode");
-        if (roomCode != null)
-            Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
     }
 
     @Override
