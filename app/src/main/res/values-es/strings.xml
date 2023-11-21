@@ -35,6 +35,11 @@
     <string name="game_round">Ronda:</string>
     <string name="round_selection">Rondas: %d</string>
     <string name="game_created">Partida creada!\\Codigo: %s</string>
-    <string name="txSalaDeEspera">Sala de Espera</string>
-    <string name="btListo">Listo</string>
+    <string name="waiting_room">Sala de Espera</string>
+    <string name="ready">Listo</string>
+    <string name="time">El juego comenzará en:</string>
+    <string name="code">ABCDEF</string>
+    <string name="seconds">60s</string>
+    <string name="not_ready">Not Ready</string>
+    <string name="not_enough_players">No hay suficientes jugadores para la partida</string>
 </resources>

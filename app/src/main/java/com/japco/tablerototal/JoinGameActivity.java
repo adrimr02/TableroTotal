@@ -106,23 +106,18 @@ public class JoinGameActivity extends AppCompatActivity {
                     startActivity(intent);
                 }));
             } else {
-                enterGameView(game);
+                enterGameView(game, roomCode);
             }
         });
     }
 
-    private void enterGameView(String game) {
+    private void enterGameView(String game, String roomCode) {
         Log.i("Joining game", game);
-        Intent intent;
-        if (game.equals(Constants.GAMES[0])) {
-            intent = new Intent(JoinGameActivity.this, RPSGameActivity.class);
-        } else if (game.equals(Constants.GAMES[1])) {
-            intent = new Intent(JoinGameActivity.this, TicTacToeActivity.class);
-        } else if (game.equals(Constants.GAMES[2])) {
-            intent = new Intent(JoinGameActivity.this, EvensAndNonesActivity.class);
-        } else {
-            return;
-        }
+        Log.i("Create a new game", game);
+        Intent intent = new Intent(JoinGameActivity.this, WaitingRoomActivity.class);
+        intent.putExtra("roomCode", roomCode);
+        intent.putExtra("game", game);
+
         startActivity(intent);
     }
 }
