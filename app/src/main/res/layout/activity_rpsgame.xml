@@ -7,15 +7,15 @@
     tools:context=".RPSGameActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/player1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="player 1"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView5"
+        app:layout_constraintEnd_toStartOf="@+id/resultado1"
         app:layout_constraintHorizontal_bias="0.575"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        app:layout_constraintTop_toTopOf="@+id/resultado1" />
 
     <TextView
         android:id="@+id/textView3"
@@ -30,18 +30,18 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/player2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="player 2"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.38"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        app:layout_constraintStart_toEndOf="@+id/resultado2"
+        app:layout_constraintTop_toTopOf="@+id/resultado2" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/resultado1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView3" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/resultado2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/numRondas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"

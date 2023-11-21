@@ -1,6 +1,8 @@
 package com.japco.tablerototal;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,19 +11,34 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.japco.tablerototal.model.User;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.socket.emitter.Emitter;
 
 public class RPSGameActivity extends AppCompatActivity {
 
+    List<User> connectedUsers = new ArrayList<>();
     SocketService socketService;
+    TextView numRondas;
+    TextView player1;
+    TextView player2;
+    TextView resultadoPlayer1;
+    TextView resultadoPlayer2;
+    ImageButton rock;
+    ImageButton paper;
+    ImageButton scissors;
     private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -49,6 +66,14 @@ public class RPSGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rpsgame);
+
+        player1 = findViewById(R.id.player1);
+        player2 = findViewById(R.id.player2);
+        resultadoPlayer1 = findViewById(R.id.resultado1);
+        resultadoPlayer2 = findViewById(R.id.resultado2);
+        rock = findViewById(R.id.buttonRock);
+        paper = findViewById(R.id.buttonPaper);
+        scissors = findViewById(R.id.buttonScissors);
     }
 
     @Override
@@ -71,11 +96,21 @@ public class RPSGameActivity extends AppCompatActivity {
         try {
             // Manejar evento de jugada realizada
             JSONObject moveData = (JSONObject) args[0];
-            String playerId = moveData.getString("playerId");
-            String move = moveData.getString("move");
+            String playerId = moveData.getString("playerId");int length = ((JSONObject) args[0]).getJSONArray("players").length();
+            connectedUsers.clear();
+
+            for(int i = 0; i < length; i++) {
+                JSONObject obj = ((JSONObject) args[0]).getJSONArray("players")
+                        .getJSONObject(i);
+                connectedUsers.add(new User(obj.getString("username"),null, null));
+            }
+
 
             // Actualizar la interfaz de usuario según sea necesario
             runOnUiThread(() -> {
+                player1.setText(connectedUsers.get(0).toString());
+                player2.setText(connectedUsers.get(1).toString());
+
             });
         } catch (JSONException e) {
             e.printStackTrace();
