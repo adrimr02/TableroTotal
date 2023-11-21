@@ -208,10 +208,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
             try {
                 String errorMsg = ((JSONObject) args[0]).getString("code");
                 if(errorMsg.equals(Constants.NOT_ENOUGHT_PLAYERS)){
-                    //TODO internacionalizar
                     runOnUiThread(() -> {
-                        Dialogs.showInfoDialog(WaitingRoomActivity.this, "Not enought " +
-                                "players for the match", (DialogInterface dialog, int id) -> {
+                        Dialogs.showInfoDialog(WaitingRoomActivity.this, getString(R.string.not_enough_players), (DialogInterface dialog, int id) -> {
                             moveToMainActivity();
                         });
                     });

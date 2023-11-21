@@ -41,4 +41,5 @@
     <string name="code">ABCDEF</string>
     <string name="seconds">60s</string>
     <string name="not_ready">Not Ready</string>
+    <string name="not_enough_players">No hay suficientes jugadores para la partida</string>
 </resources>
