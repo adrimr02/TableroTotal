@@ -178,6 +178,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
         //Actualiza lista de usuarios conectados
         socketService.getSocket().on(Constants.ServerEvents.SHOW_PLAYERS_WAITING, args -> {
             try {
+                System.out.println(args[0]);
+
                 int length = ((JSONObject) args[0]).getJSONArray("players").length();
                 connectedUsers.clear();
 
@@ -185,8 +187,14 @@ public class WaitingRoomActivity extends AppCompatActivity {
                     JSONObject obj = ((JSONObject) args[0]).getJSONArray("players")
                             .getJSONObject(i);
 
+                    String state;
+                    if(obj.getString("readyState").equals(Constants.READY))
+                        state = "Ready";
+                    else
+                        state = "Not Ready";
+
                     connectedUsers.add(new User(obj.getString("username"),
-                            obj.getString("readyState"), null));
+                            state, null));
                 }
 
                 runOnUiThread(() -> {
@@ -209,7 +217,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 String errorMsg = ((JSONObject) args[0]).getString("code");
                 if(errorMsg.equals(Constants.NOT_ENOUGHT_PLAYERS)){
                     runOnUiThread(() -> {
-                        Dialogs.showInfoDialog(WaitingRoomActivity.this, getString(R.string.not_enough_players), (DialogInterface dialog, int id) -> {
+                        Dialogs.showInfoDialog(WaitingRoomActivity.this,
+                                getString(R.string.not_enough_players),
+                                (DialogInterface dialog, int id) -> {
                             moveToMainActivity();
                         });
                     });
@@ -226,9 +236,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
             String text;
             text = (String) args[0];
 
-            //Actualizamos el valor del boton al estado correspondiente
+            //Actualizamos el valor del boton al siguiente estado
             runOnUiThread(() -> {
-                if(text.equals(Constants.READY)){
+                if(text.equals(Constants.NOT_READY)){
                     listo.setText(getString(R.string.ready));
                 } else {
                     listo.setText(getString(R.string.not_ready));
