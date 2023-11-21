@@ -150,7 +150,6 @@ public class NewGameActivity extends AppCompatActivity {
             return;
         }
 
-        System.out.println("Trying to create " + socketService.getSocket().connected());
         socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new Object[] { username, gameOptions } , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError = false;

@@ -37,7 +37,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         4- Comenzar partida (emit)
      */
 
-    List<User> connectedUsers;
+    List<User> connectedUsers = new ArrayList<>();
     UsersListAdapter usersAdapter;
     String roomCode;
     String game;
@@ -48,16 +48,23 @@ public class WaitingRoomActivity extends AppCompatActivity {
     SocketService socketService;
     TextView cronometro;
     TextView codigo;
+
+    boolean mBound;
+
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
+            mBound = true;
+            addListeners();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
+            socketService = null;
+            mBound = false;
         }
     };
 
@@ -71,7 +78,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         volver = findViewById(R.id.btAtras);
         connectedUsersView = (RecyclerView)findViewById(R.id.rcylConnectedUsers);
-        cronometro = findViewById(R.id.txTiempo);
+        cronometro = findViewById(R.id.txContador);
         listo = findViewById(R.id.btListo);
         codigo = findViewById(R.id.txCodigo);
         compartir = findViewById(R.id.fabCompartir);
@@ -116,9 +123,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
         // Bind to socket service
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-
         // Añadimos eventos del servidor
-        addListeners();
+        System.out.println("Listeners aqui");
+//        addListeners();
     }
 
     @Override
@@ -129,6 +136,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         socketService.getSocket().off(Constants.ClientEvents.MARK_AS_READY);
         socketService.getSocket().off(Constants.ServerEvents.START_GAME);
         unbindService(connection);
+        mBound = false;
     }
 
     public void clickOnItem(User user){
@@ -145,7 +153,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
         //Actualiza valor crónometro
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
-                int counter = ((JSONObject) args[0]).getInt(Constants.ServerEvents.SHOW_TIME);
+                System.out.println(args[0]);
+                int counter = ((JSONObject) args[0]).getInt("counter");
                 runOnUiThread(() -> {
                     cronometro.setText(counter + "s");
                 });

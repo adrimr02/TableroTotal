@@ -73,7 +73,6 @@
         android:id="@+id/txContador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1000s"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/txSalaDeEspera"

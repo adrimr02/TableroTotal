@@ -41,7 +41,7 @@ public class SocketService extends Service {
 
     @Override
     public void onDestroy() {
-        mSocket.close();
+        mSocket.disconnect();
         super.onDestroy();
     }
 
