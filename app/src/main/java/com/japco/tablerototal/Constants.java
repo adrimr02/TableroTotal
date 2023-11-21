@@ -18,9 +18,25 @@ public class Constants {
     public static final class ClientEvents {
         public static final String JOIN_GAME = "join";
         public static final String CREATE_GAME = "create";
+        public static final String MAKE_MOVE = "make_move";
     }
 
     public static final class ServerEvents {
-        /* v.g. game_start o game_end */
+        // Common
+        public static final String SHOW_TIME = "show_time";
+
+        // Waiting room
+        public static final String SHOW_PLAYERS_WAITING = "show_players_waiting";
+        public static final String START_GAME = "start_game";
+
+        // Game
+        public static final String NEXT_TURN = "next_turn";
+        public static final String SHOW_TURN_RESULTS = "show_turn_results";
+        public static final String FINISH_GAME = "finish_game";
+
+        public static final String MOVE_MADE = "move_made";
+        public static final String ROUND_RESULT = "round_result";
+
+
     }
 }
