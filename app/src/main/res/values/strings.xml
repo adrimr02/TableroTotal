@@ -22,7 +22,6 @@
     <string name="TicTacToe">TicTacToe</string>
     <string name="RPS">Rock, Paper, Scissors</string>
     <string name="EvensAndNones">Odds and Evens</string>
-
     <string name="game_date">23/10/2023</string>
     <string name="game_title">Rock, Paper, Scissors</string>
     <string name="winner">Winner: Pouchie07</string>
@@ -35,4 +34,11 @@
     <string name="game_round">Round:</string>
     <string name="round_selection">Rounds: %d</string>
     <string name="game_created">New game created!\\nRoom code: %s</string>
+    <string name="waiting_room">Waiting Room</string>
+    <string name="ready">Ready</string>
+    <string name="time">The game will start in:</string>
+    <string name="code">ABCDEF</string>
+    <string name="seconds">60s</string>
+    <string name="not_ready">Not Ready</string>
+    <string name="not_enough_players">Not enough players for the match</string>
 </resources>

@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
+
+import java.util.Arrays;
 
 public class TicTacToeActivity extends AppCompatActivity {
 
@@ -38,9 +41,6 @@ public class TicTacToeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tresenraya);
-        String roomCode = getIntent().getStringExtra("roomCode");
-        if (roomCode != null)
-            Dialogs.showInfoDialog(this, String.format(getString(R.string.game_created), roomCode));
     }
 
     @Override
@@ -49,6 +49,7 @@ public class TicTacToeActivity extends AppCompatActivity {
         // Bind to socket service
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        addSocketListeners();
     }
 
     @Override
@@ -56,5 +57,23 @@ public class TicTacToeActivity extends AppCompatActivity {
         super.onStop();
         unbindService(connection);
         mBound = false;
+    }
+
+    private void addSocketListeners() {
+        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, args -> {
+            Log.d("NEXT_TURN", Arrays.toString(args));
+        });
+
+        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, args -> {
+            Log.d("NEXT_TURN", Arrays.toString(args));
+        });
+
+        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, args -> {
+            Log.d("NEXT_TURN", Arrays.toString(args));
+        });
+
+        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, args -> {
+            Log.d("NEXT_TURN", Arrays.toString(args));
+        });
     }
 }

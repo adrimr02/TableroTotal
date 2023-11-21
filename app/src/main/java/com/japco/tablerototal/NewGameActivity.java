@@ -8,9 +8,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -73,10 +71,12 @@ public class NewGameActivity extends AppCompatActivity {
         roundsLabel = findViewById(R.id.roundsLabel);
         roundsLabel.setText(String.format(getString(R.string.round_selection), selectedRounds));
         createGameButton = findViewById(R.id.buttonConfirmGame);
+        backButton = findViewById(R.id.buttonBack);
 
         ticTacToeButton.setOnClickListener(v -> checkButton(ticTacToeButton));
         rpsButton.setOnClickListener(v -> checkButton(rpsButton));
         oddsEvensButton.setOnClickListener(v -> checkButton(oddsEvensButton));
+        backButton.setOnClickListener(v -> finish());
         roundsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -166,35 +166,27 @@ public class NewGameActivity extends AppCompatActivity {
                 }
             } catch (JSONException e) {
                 isError = true;
+                e.printStackTrace();
             }
 
             if (isError) {
-                Dialogs.showInfoDialog(NewGameActivity.this, R.string.new_game_error_message, (DialogInterface dialog, int id) -> {
+                runOnUiThread(() -> Dialogs.showInfoDialog(NewGameActivity.this, R.string.new_game_error_message, (DialogInterface dialog, int id) -> {
                     dialog.dismiss();
                     Intent intent = new Intent(NewGameActivity.this, MainActivity.class);
                     startActivity(intent);
-                });
+                }));
             } else {
-                enterGameView(game, roomCode);
+                enterWaitingRoomView(game, roomCode);
             }
         });
     }
 
-    private void enterGameView(String game, String roomCode) {
+    private void enterWaitingRoomView(String game, String roomCode) {
         Log.i("Create a new game", game);
-        Intent intent = null;
-        if (game.equals(Constants.GAMES[0])) {
-            intent = new Intent(NewGameActivity.this, RPSGameActivity.class);
-            intent.putExtra("roomCode", roomCode);
-        } else if (game.equals(Constants.GAMES[1])) {
-             intent = new Intent(NewGameActivity.this, TicTacToeActivity.class);
-            intent.putExtra("roomCode", roomCode);
-        } else if (game.equals(Constants.GAMES[2])) {
-             intent = new Intent(NewGameActivity.this, EvensAndNonesActivity.class);
-            intent.putExtra("roomCode", roomCode);
-        } else {
-            return;
-        }
+        Intent intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
+        intent.putExtra("roomCode", roomCode);
+        intent.putExtra("game", game);
+
         startActivity(intent);
     }
 }
