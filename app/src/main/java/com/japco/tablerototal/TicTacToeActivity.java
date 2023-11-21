@@ -21,7 +21,6 @@ import java.util.Arrays;
 public class TicTacToeActivity extends AppCompatActivity {
 
     SocketService socketService;
-    private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -31,12 +30,12 @@ public class TicTacToeActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
+            addSocketListeners();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            socketService = null;
         }
     };
 
@@ -55,7 +54,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         // Bind to socket service
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        addSocketListeners();
     }
 
     @Override
@@ -66,7 +64,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
         unbindService(connection);
-        mBound = false;
     }
 
     private void addSocketListeners() {

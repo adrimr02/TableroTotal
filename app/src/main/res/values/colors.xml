@@ -9,7 +9,7 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="danger">#E63A3A</color>
-    <color name="btn_on">#9C27B0</color>
-    <color name="btn_off">#CE93D8</color>
+    <color name="btn_on">#FF0288d1</color>
+    <color name="btn_off">#FF40C4FF</color>
     <color name="lavender">#8692f7</color>
 </resources>

@@ -32,6 +32,7 @@ public class Constants {
         public static final String START_GAME = "start_game";
 
         // Game
+        public static final String SHOW_INITIAL_INFO = "show_initial_info";
         public static final String NEXT_TURN = "next_turn";
         public static final String SHOW_TURN_RESULTS = "show_turn_results";
         public static final String FINISH_GAME = "finish_game";
