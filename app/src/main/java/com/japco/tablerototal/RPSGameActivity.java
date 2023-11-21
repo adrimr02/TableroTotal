@@ -33,6 +33,8 @@ public class RPSGameActivity extends AppCompatActivity {
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
             mBound = true;
+            socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
+            socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
             //addListeners();
         }
 
@@ -42,7 +44,6 @@ public class RPSGameActivity extends AppCompatActivity {
             mBound = false;
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,6 @@ public class RPSGameActivity extends AppCompatActivity {
         // Bind to socket service
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
-        socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
     }
 
     @Override
@@ -96,8 +95,6 @@ public class RPSGameActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
     };
-
-
 
     private void makeMove(String move) {
         // Enviar la jugada al servidor
