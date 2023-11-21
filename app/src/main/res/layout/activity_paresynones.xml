@@ -13,7 +13,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="20dp"
         android:text="Pares y Nones"
         android:textColor="#FFFFFF"
         android:textSize="48sp"
@@ -50,12 +50,14 @@
         android:id="@+id/paresyNones"
         android:layout_width="278dp"
         android:layout_height="84dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/botonPares"
@@ -79,11 +81,10 @@
         android:id="@+id/turnTextView"
         android:layout_width="162dp"
         android:layout_height="44dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="196dp"
+        android:layout_marginBottom="88dp"
         android:background="#dbdbdb"
         android:gravity="center"
-        android:text="Tú Turno"
+        android:text="Tu Turno"
         android:textAlignment="center"
         android:textColor="#100F0F"
         android:textSize="24sp"
@@ -92,7 +93,7 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/paresyNones"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <TextView
         android:id="@+id/Oponente"
@@ -113,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="144dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:text="@string/game_round"
         android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/buttonLeave"
@@ -129,5 +130,18 @@
         app:layout_constraintHorizontal_bias="0.192"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+    <EditText
+        android:id="@+id/txNumero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.379" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
