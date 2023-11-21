@@ -35,6 +35,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
         2- Actualizar jugadores conectados (on)
         3- Ponerse en estado listo (emit)
         4- Comenzar partida (emit)
+
+        5- Abandonar partida
+        6- Avisar cuando no haya suficientes jugadores
      */
 
     List<User> connectedUsers = new ArrayList<>();
@@ -48,7 +51,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
     SocketService socketService;
     TextView cronometro;
     TextView codigo;
-
     boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -58,6 +60,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
             mBound = true;
+
+            // Añadimos eventos del servidor
             addListeners();
         }
 
@@ -105,13 +109,24 @@ public class WaitingRoomActivity extends AppCompatActivity {
             compartirCodigo();
         });
 
+        volver.setOnClickListener(v -> {
+            moveToMainActivity();
+        });
+
+    }
+
+    private void moveToMainActivity() {
+        Intent intent = new Intent(WaitingRoomActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void compartirCodigo() {
         Intent itSend = new Intent(Intent.ACTION_SEND);
         itSend.setType("text/plain");
-        itSend.putExtra(Intent.EXTRA_SUBJECT, "Te comparto el código para unirte " +
-                "a mi partida: " + roomCode);
+        itSend.putExtra(Intent.EXTRA_SUBJECT, "¿A qué esperas? ¡Únete a mi partida!");
+        itSend.putExtra(Intent.EXTRA_TEXT, "¡Te reto a una partida de " + game + "! " +
+                "El código de la sala es: " + roomCode);
 
         Intent shareIntent = Intent.createChooser(itSend, null);
         startActivity(shareIntent);
@@ -123,9 +138,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
         // Bind to socket service
         Intent intent = new Intent(this, SocketService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        // Añadimos eventos del servidor
-        System.out.println("Listeners aqui");
-//        addListeners();
     }
 
     @Override
@@ -182,7 +194,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                 });
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         });
 
@@ -191,6 +203,23 @@ public class WaitingRoomActivity extends AppCompatActivity {
             enterGameView();
         });
 
+        //Cancela si no se cumplen las condiciones para iniciar partida
+        socketService.getSocket().on("error", args -> {
+            try {
+                String errorMsg = ((JSONObject) args[0]).getString("code");
+                if(errorMsg.equals(Constants.NOT_ENOUGHT_PLAYERS)){
+                    //TODO internacionalizar
+                    runOnUiThread(() -> {
+                        Dialogs.showInfoDialog(WaitingRoomActivity.this, "Not enought " +
+                                "players for the match", (DialogInterface dialog, int id) -> {
+                            moveToMainActivity();
+                        });
+                    });
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void updateReadyState(){
@@ -201,7 +230,11 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
             //Actualizamos el valor del boton al estado correspondiente
             runOnUiThread(() -> {
-                listo.setText(text);
+                if(text.equals(Constants.READY)){
+                    listo.setText(getString(R.string.ready));
+                } else {
+                    listo.setText(getString(R.string.not_ready));
+                }
             });
         });
     }
