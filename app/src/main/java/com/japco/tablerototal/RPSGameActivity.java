@@ -76,6 +76,8 @@ public class RPSGameActivity extends AppCompatActivity {
 
             // Actualizar la interfaz de usuario según sea necesario
             runOnUiThread(() -> {
+
+
             });
         } catch (JSONException e) {
             e.printStackTrace();
