@@ -84,16 +84,17 @@ public class RPSGameActivity extends AppCompatActivity {
     };
 
     private final Emitter.Listener onRoundResult = args -> {
-        try {
-            // Manejar evento de resultado del round
-            JSONObject roundResult = (JSONObject) args[0];
-            // Extraer la información del resultado y actualizar la interfaz de usuario
-
-            runOnUiThread(() -> {
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        //TODO Daba error por que no era necesario tener el try/catch
+//        try {
+//            // Manejar evento de resultado del round
+//            JSONObject roundResult = (JSONObject) args[0];
+//            // Extraer la información del resultado y actualizar la interfaz de usuario
+//
+//            runOnUiThread(() -> {
+//            });
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     };
 
 
@@ -104,7 +105,7 @@ public class RPSGameActivity extends AppCompatActivity {
             JSONObject moveData = new JSONObject();
             moveData.put("playerId", "player1"); // Puedes obtener el ID del jugador según sea necesario
             moveData.put("move", move);
-            socketService.getSocket().emit(Constants.ClientEvents.MAKE_MOVE, moveData);
+            socketService.getSocket().emit(Constants.ClientEvents.MOVE, moveData);
         } catch (JSONException e) {
             e.printStackTrace();
         }
