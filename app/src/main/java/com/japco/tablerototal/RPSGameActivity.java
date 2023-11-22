@@ -59,7 +59,6 @@ public class RPSGameActivity extends AppCompatActivity {
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             socketService = null;
-            mBound = false;
         }
     };
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
+    android:background="@drawable/custom_background"
     tools:context=".WaitingRoomActivity">
 
     <Button
@@ -95,8 +95,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:text="@string/code"
-        android:textColor="#B88938"
-        android:textSize="24sp"
+        android:textColor="@color/white"
+        android:textSize="26sp"
         app:layout_constraintBottom_toTopOf="@+id/txContador"
         app:layout_constraintEnd_toStartOf="@+id/fabCompartir"
         app:layout_constraintHorizontal_bias="0.896"
