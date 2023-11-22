@@ -53,8 +53,7 @@ public class RPSGameActivity extends AppCompatActivity {
             mBound = true;
             socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
             socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
-            socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, oncounter);
-            //addListeners();
+            addListeners();
         }
 
         @Override
@@ -95,17 +94,21 @@ public class RPSGameActivity extends AppCompatActivity {
     }
     //Actualiza valor crónometro
 
-    private final Emitter.Listener oncounter = args -> {
-        try {
-            System.out.println(args[0]);
-            int counter = ((JSONObject) args[0]).getInt("counter");
-            runOnUiThread(() -> {
-                contador.setText(counter + "s");
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    };
+    private void addListeners() {
+
+        //Actualiza valor crónometro
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
+            try {
+                System.out.println(args[0]);
+                int counter = ((JSONObject) args[0]).getInt("counter");
+                runOnUiThread(() -> {
+                    contador.setText(counter + "s");
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
     // Agrega el código para manejar el evento de jugada realizada
     private final Emitter.Listener onMoveMade = args -> {
