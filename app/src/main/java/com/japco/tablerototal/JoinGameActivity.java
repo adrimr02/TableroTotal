@@ -22,17 +22,14 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import io.socket.client.Socket;
-
 public class JoinGameActivity extends AppCompatActivity {
 
     private Button joinButton;
     private EditText codeField;
 
     SocketService socketService;
-    private boolean mBound;
 
-    private ServiceConnection connection = new ServiceConnection() {
+    private final ServiceConnection connection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -40,12 +37,11 @@ public class JoinGameActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            socketService = null;
         }
     };
 
@@ -63,9 +59,7 @@ public class JoinGameActivity extends AppCompatActivity {
 
         joinButton.setOnClickListener(v -> {
             if (codeField.getText().toString().trim().length() != 6) {
-                Dialogs.showInfoDialog(JoinGameActivity.this, R.string.no_code_dialog_message, (DialogInterface dialog, int id) -> {
-                    dialog.dismiss();
-                });
+                Dialogs.showInfoDialog(JoinGameActivity.this, R.string.no_code_dialog_message, (DialogInterface dialog, int id) -> dialog.dismiss());
                 return;
             }
             connect(codeField.getText().toString().trim(), username);
@@ -85,13 +79,12 @@ public class JoinGameActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
-        mBound = false;
     }
 
     private void connect(String roomCode, String username) {
-        socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new String[] { username, roomCode} , args -> {
+        socketService.getSocket().emit(Constants.ClientEvents.JOIN_GAME, new String[] { username, roomCode} , args -> {
             JSONObject response = (JSONObject) args[0];
-            boolean isError = false;
+            boolean isError;
             String game = null;
             try {
                 String status = response.getString(Constants.RESPONSE_STATUS);
@@ -106,34 +99,23 @@ public class JoinGameActivity extends AppCompatActivity {
             }
 
             if (isError) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Dialogs.showInfoDialog(JoinGameActivity.this, R.string.join_error_message, (DialogInterface dialog, int id) -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(JoinGameActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        });
-                    }
-                });
+                runOnUiThread(() -> Dialogs.showInfoDialog(JoinGameActivity.this,
+                        R.string.join_error_message, (DialogInterface dialog, int id) -> {
+                    dialog.dismiss();
+                }));
             } else {
-                enterGameView(game, socketService);
+                enterGameView(game, roomCode);
             }
         });
     }
 
-    private void enterGameView(String game, SocketService mSocket) {
+    private void enterGameView(String game, String roomCode) {
         Log.i("Joining game", game);
-        Intent intent = null;
-        if (game.equals(Constants.GAMES[0])) {
-            intent = new Intent(JoinGameActivity.this, RPSGameActivity.class);
-        } else if (game.equals(Constants.GAMES[1])) {
-            intent = new Intent(JoinGameActivity.this, TicTacToeActivity.class);
-        } else if (game.equals(Constants.GAMES[2])) {
-            intent = new Intent(JoinGameActivity.this, EvensAndNonesActivity.class);
-        } else {
-            return;
-        }
+        Log.i("Create a new game", game);
+        Intent intent = new Intent(JoinGameActivity.this, WaitingRoomActivity.class);
+        intent.putExtra("roomCode", roomCode);
+        intent.putExtra("game", game);
+
         startActivity(intent);
     }
 }

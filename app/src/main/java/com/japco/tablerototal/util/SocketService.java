@@ -30,7 +30,7 @@ public class SocketService extends Service {
             Manager manager = new Manager(new URI(Constants.SERVER_URL));
             mSocket = manager.socket("/play");
             mSocket.connect();
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException ignored) {}
     }
 
     @Nullable
@@ -41,7 +41,7 @@ public class SocketService extends Service {
 
     @Override
     public void onDestroy() {
-        mSocket.close();
+        mSocket.disconnect();
         super.onDestroy();
     }
 

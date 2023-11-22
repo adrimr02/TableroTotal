@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.japco.tablerototal.util.Connection;
 import com.japco.tablerototal.util.Dialogs;
 
+import java.util.Objects;
+
 public class HomeFragment extends Fragment {
 
     private EditText editUsername;
@@ -37,8 +39,13 @@ public class HomeFragment extends Fragment {
         createGameButton = view.findViewById(R.id.buttonCreateGame);
         joinGameButton = view.findViewById(R.id.buttonJoinGame);
 
+        String username = ((MyApplication) requireActivity().getApplication()).getUsername();
+        if (username != null) {
+            editUsername.setText(username);
+        }
+
         createGameButton.setOnClickListener(v -> {
-            if (!validate()) return;
+            if (!isValid()) return;
             Log.i("Navigation","Redirecting to create game.");
             Intent intent = new Intent(v.getContext(), NewGameActivity.class);
             intent.putExtra("username", editUsername.getText().toString().trim());
@@ -46,7 +53,7 @@ public class HomeFragment extends Fragment {
         });
 
         joinGameButton.setOnClickListener(v -> {
-            if (!validate()) return;
+            if (!isValid()) return;
             Log.i("Navigation","Redirecting to join game.");
             Intent intent = new Intent(v.getContext(), JoinGameActivity.class);
             intent.putExtra(Constants.USERNAME_EXTRA, editUsername.getText().toString().trim());
@@ -55,7 +62,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private boolean validate() {
+    private boolean isValid() {
         boolean hasConnection = new Connection(getActivity()).checkConnection();
         if (!hasConnection) {
             Dialogs.showInfoDialog(getActivity(), R.string.no_connection_dialog_message);
@@ -66,6 +73,7 @@ public class HomeFragment extends Fragment {
             Dialogs.showInfoDialog(getActivity(), R.string.no_nickname_dialog_message);
             return false;
         }
+        ((MyApplication) requireActivity().getApplication()).setUsername(editUsername.getText().toString().trim());
         return true;
     }
 }
