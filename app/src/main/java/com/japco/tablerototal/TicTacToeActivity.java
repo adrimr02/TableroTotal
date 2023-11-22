@@ -1,11 +1,13 @@
 package com.japco.tablerototal;
 
+import android.app.usage.ConfigurationStats;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,10 +27,9 @@ import java.util.Optional;
 public class TicTacToeActivity extends AppCompatActivity {
 
     SocketService socketService;
-
-    TextView playerOneName;
-    TextView playerTwoName;
+    TextView[] playerNames = new TextView[2];
     TextView counter;
+    Button leaveBtn;
 
     Player[] players = new Player[2];
     ImageView[] boardImgs = new ImageView[9];
@@ -62,12 +63,19 @@ public class TicTacToeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tresenraya);
 
         findElements();
+
+        leaveBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void findElements() {
-        playerOneName = findViewById(R.id.playerOneName);
-        playerTwoName = findViewById(R.id.playerTwoName);
+        playerNames[0]  = findViewById(R.id.playerOneName);
+        playerNames[1] = findViewById(R.id.playerTwoName);
         counter = findViewById(R.id.timeCounter);
+        leaveBtn = findViewById(R.id.buttonLeave);
 
         boardImgs[0] = findViewById(R.id.image1);
         boardImgs[1] = findViewById(R.id.image2);
@@ -84,9 +92,9 @@ public class TicTacToeActivity extends AppCompatActivity {
         for (int i = 0; i < board.length; i++) {
             if (!hasTurn) {
                 boardImgs[i].setOnClickListener(null);
-                boardImgs[i].setForeground(AppCompatResources.getDrawable(this, R.drawable.deactivated_button));
+                boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.gray_box));
             } else {
-                boardImgs[i].setForeground(null);
+                boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.white_box));
                 if (board[i] == 0) {
                     int finalI = i;
                     JSONObject param = new JSONObject();
@@ -106,13 +114,13 @@ public class TicTacToeActivity extends AppCompatActivity {
             boardImgs[i].setOnClickListener(null);
             switch (board[i]) {
                 case 1:
-                    boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.xtrs));
+                    boardImgs[i].setForeground(AppCompatResources.getDrawable(this, R.drawable.xtrs));
                     break;
                 case 2:
-                    boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.circulo));
+                    boardImgs[i].setForeground(AppCompatResources.getDrawable(this, R.drawable.circulo));
                     break;
                 default:
-                    boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.white_box));
+                    boardImgs[i].setForeground(null);
                     break;
             }
         }
@@ -133,13 +141,17 @@ public class TicTacToeActivity extends AppCompatActivity {
         socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
         socketService.getSocket().off(Constants.ServerEvents.NEXT_TURN);
         socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+
+        // Se elimina el show_time de la sala de espera
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
         unbindService(connection);
     }
 
     private void addSocketListeners() {
-        System.out.println("Initializing listeners");
+        System.out.println("Initializing TTT game listeners");
         socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
             System.out.println(args[0]);
             try {
@@ -154,8 +166,8 @@ public class TicTacToeActivity extends AppCompatActivity {
                 }
                 runOnUiThread(() -> {
                     if (playersArray.length() >= 2) {
-                        playerOneName.setText(players[0].username);
-                        playerTwoName.setText(players[1].username);
+                        playerNames[0].setText(players[0].username);
+                        playerNames[1].setText(players[1].username);
                     }
                     paintBoard();
                 });
@@ -169,6 +181,13 @@ public class TicTacToeActivity extends AppCompatActivity {
             try {
                 String nextPlayer = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS).getJSONObject(0).getString(Constants.Keys.ID);
                 System.out.println("Siguiente turno: " + nextPlayer);
+                for (Player p : players) {
+                    if (p.getId().equals(nextPlayer)) {
+                        runOnUiThread(() -> {
+
+                        });
+                    }
+                }
                 if (userId.equals(nextPlayer)) {
                     this.hasTurn = true;
                     runOnUiThread(() -> Dialogs.showInfoDialog(this, "Tienes el turno", (dialog, ignore) -> {
@@ -221,6 +240,9 @@ public class TicTacToeActivity extends AppCompatActivity {
             JSONObject results = ((JSONObject) args[0]);
             runOnUiThread(() -> showFinishGame(results));
         });
+
+        // Notify server when client is ready
+        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
     }
 
     private void showFinishGame(JSONObject results) {
