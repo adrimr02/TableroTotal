@@ -96,6 +96,7 @@ public class RPSGameActivity extends AppCompatActivity {
 
     private void addListeners() {
 
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
         //Actualiza valor crónometro
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
@@ -108,6 +109,10 @@ public class RPSGameActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
+        socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade); // ???? No funcionara porque el evento move_made no esta en el servidor
+
+//        socketService.getSocket().emit(Constants.ClientEvents.)
     }
 
     // Agrega el código para manejar el evento de jugada realizada
