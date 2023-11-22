@@ -42,6 +42,11 @@ public class Constants {
         public static final String SHOW_TURN_RESULTS = "show_turn_results";
         public static final String FINISH_GAME = "finish_game";
 
+
+
+
+        public static final String MOVE_MADE = "move_made";
+        public static final String ROUND_RESULT = "round_result";
     }
 
     public static class Keys {

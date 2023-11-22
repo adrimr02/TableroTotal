@@ -40,7 +40,6 @@ public class RPSGameActivity extends AppCompatActivity {
     ImageButton paper;
     ImageButton scissors;
     TextView contador;
-    private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -50,9 +49,6 @@ public class RPSGameActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
-            socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
-            socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
             addListeners();
         }
 
@@ -89,7 +85,6 @@ public class RPSGameActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
-        mBound = false;
     }
     //Actualiza valor crónometro
 
@@ -109,9 +104,11 @@ public class RPSGameActivity extends AppCompatActivity {
             }
         });
 
-        socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade); // ???? No funcionara porque el evento move_made no esta en el servidor
+        // TODO No funcionaran porque el evento move_made no esta en el servidor
+        socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
+        socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
 
-//        socketService.getSocket().emit(Constants.ClientEvents.)
+        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
     }
 
     // Agrega el código para manejar el evento de jugada realizada
