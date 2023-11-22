@@ -39,6 +39,7 @@ public class RPSGameActivity extends AppCompatActivity {
     ImageButton rock;
     ImageButton paper;
     ImageButton scissors;
+    TextView contador;
     private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -52,6 +53,7 @@ public class RPSGameActivity extends AppCompatActivity {
             mBound = true;
             socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
             socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
+            socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, oncounter);
             //addListeners();
         }
 
@@ -74,6 +76,7 @@ public class RPSGameActivity extends AppCompatActivity {
         rock = findViewById(R.id.buttonRock);
         paper = findViewById(R.id.buttonPaper);
         scissors = findViewById(R.id.buttonScissors);
+        contador = findViewById(R.id.contador);
     }
 
     @Override
@@ -90,6 +93,19 @@ public class RPSGameActivity extends AppCompatActivity {
         unbindService(connection);
         mBound = false;
     }
+    //Actualiza valor crónometro
+
+    private final Emitter.Listener oncounter = args -> {
+        try {
+            System.out.println(args[0]);
+            int counter = ((JSONObject) args[0]).getInt("counter");
+            runOnUiThread(() -> {
+                contador.setText(counter + "s");
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    };
 
     // Agrega el código para manejar el evento de jugada realizada
     private final Emitter.Listener onMoveMade = args -> {
