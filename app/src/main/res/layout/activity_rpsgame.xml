@@ -68,11 +68,11 @@
         android:layout_marginTop="16dp"
         android:text="@string/game_round"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/buttonLeave"
+        app:layout_constraintStart_toEndOf="@+id/btSalir"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/txNumeroRonda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"
@@ -83,7 +83,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView7" />
 
     <Button
-        android:id="@+id/buttonLeave"
+        android:id="@+id/btSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

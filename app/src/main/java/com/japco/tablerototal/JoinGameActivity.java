@@ -27,6 +27,8 @@ public class JoinGameActivity extends AppCompatActivity {
     private Button joinButton;
     private EditText codeField;
 
+    private String username;
+
     SocketService socketService;
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -54,7 +56,7 @@ public class JoinGameActivity extends AppCompatActivity {
         codeField = findViewById(R.id.gameCodeField);
         TextView textUsername = findViewById(R.id.textUsername);
 
-        String username = getIntent().getStringExtra(Constants.USERNAME_EXTRA);
+        username = getIntent().getStringExtra(Constants.USERNAME_EXTRA);
         textUsername.setText(username);
 
         joinButton.setOnClickListener(v -> {
@@ -117,6 +119,7 @@ public class JoinGameActivity extends AppCompatActivity {
         Intent intent = new Intent(JoinGameActivity.this, WaitingRoomActivity.class);
         intent.putExtra("roomCode", roomCode);
         intent.putExtra("game", game);
+        intent.putExtra("username", username);
 
         startActivity(intent);
     }
