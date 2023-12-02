@@ -25,6 +25,7 @@ public class Constants {
         public static final String MARK_AS_READY = "mark_as_ready";
         public static final String MOVE = "move";
 
+        public static final String CLIENT_READY = "client_ready";
     }
 
     public static final class ServerEvents {
@@ -54,12 +55,13 @@ public class Constants {
         public static final String BOARD = "board";
         public static final String TYPE = "type";
         public static final String WINNER = "winner";
+        public static final String CELL = "cell";
     }
 
     public static class ResultTypes {
         public static final String DRAW = "draw";
         public static final String WIN = "winner";
-        public static final String TIMEOUT = "timeout";
+        public static final String TIMEOUT  = "timeout";
         public static final String RESIGNATION = "resignation";
 
     }

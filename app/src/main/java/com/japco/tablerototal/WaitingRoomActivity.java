@@ -145,7 +145,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        System.out.println("Removing WR listeners");
         socketService.getSocket().off(Constants.ServerEvents.SHOW_PLAYERS_WAITING);
         socketService.getSocket().off(Constants.ClientEvents.MARK_AS_READY);
         socketService.getSocket().off(Constants.ServerEvents.START_GAME);
@@ -190,9 +190,9 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
                     String state;
                     if(obj.getString("readyState").equals(Constants.READY))
-                        state = "Ready";
+                        state = getString(R.string.ready);
                     else
-                        state = "Not Ready";
+                        state = getString(R.string.not_ready);
 
                     connectedUsers.add(new User(obj.getString("username"),
                             state, null));

@@ -17,6 +17,7 @@
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/danger"
         android:text="@string/button_leave"
+        android:translationZ="90dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,18 +25,21 @@
         android:id="@+id/timeCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="170dp"
+        android:layout_marginStart="200dp"
         android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:text="9"
+        android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="28sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_above="@id/container"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="-2dp"
+        android:layout_marginBottom="3dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <LinearLayout

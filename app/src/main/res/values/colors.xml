@@ -12,4 +12,5 @@
     <color name="btn_on">#FF0288d1</color>
     <color name="btn_off">#FF40C4FF</color>
     <color name="lavender">#8692f7</color>
+    <color name="gray">#FF999999</color>
 </resources>

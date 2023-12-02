@@ -104,8 +104,6 @@ public class JoinGameActivity extends AppCompatActivity {
                 runOnUiThread(() -> Dialogs.showInfoDialog(JoinGameActivity.this,
                         R.string.join_error_message, (DialogInterface dialog, int id) -> {
                     dialog.dismiss();
-                    Intent intent = new Intent(JoinGameActivity.this, MainActivity.class);
-                    startActivity(intent);
                 }));
             } else {
                 enterGameView(game, roomCode);
