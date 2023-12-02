@@ -69,6 +69,16 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
         btNones.setOnClickListener(v -> {
             tipoNumero = "Nones";
+            try {
+                JSONObject obj  = new JSONObject();
+                obj.put("numberType", "Nones");
+                obj.put("number", Integer.parseInt(txNumero.getText().toString()));
+                socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
         });
 
         btPares.setOnClickListener(v -> {
@@ -113,8 +123,13 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             }
         });
 
-        //Numero de ronda
-        //TODO...
+        //Resultado, ronda y pts
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
+                int counter = Integer.parseInt(args[0].toString());
+                runOnUiThread(() -> {
+                    txTiempo.setText(counter + "s");
+                });
+        });
 
         //Puntuación
         //TODO...
