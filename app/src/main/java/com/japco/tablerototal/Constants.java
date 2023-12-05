@@ -56,6 +56,9 @@ public class Constants {
         public static final String TYPE = "type";
         public static final String WINNER = "winner";
         public static final String CELL = "cell";
+        public static final String POINTS = "points" ;
+        public static final String PLAYER_ID = "playerId" ;
+        public static final String ROUND = "round";
     }
 
     public static class ResultTypes {

@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +26,6 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     TextView txTiempo;
     TextView txPuntos;
     TextView txRonda;
-    String tipoNumero = "";
     String username;
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -68,21 +65,35 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         });
 
         btNones.setOnClickListener(v -> {
-            tipoNumero = "Nones";
             try {
                 JSONObject obj  = new JSONObject();
+                //TODO enviar nombre
                 obj.put("numberType", "Nones");
                 obj.put("number", Integer.parseInt(txNumero.getText().toString()));
                 socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
 
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
+            btPares.setEnabled(false);
+            btNones.setEnabled(false);
         });
 
         btPares.setOnClickListener(v -> {
-            tipoNumero = "Pares";
+            try {
+                JSONObject obj  = new JSONObject();
+                //TODO enviar nombre
+                obj.put("numberType", "Pares");
+                obj.put("number", Integer.parseInt(txNumero.getText().toString()));
+                socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            btPares.setEnabled(false);
+            btNones.setEnabled(false);
         });
     }
 
@@ -103,8 +114,11 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
 
-        //TODO desactivar los .on y .emit
+        socketService.getSocket().off(Constants.ClientEvents.MOVE);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
+        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+        socketService.getSocket().off(Constants.ClientEvents.CLIENT_READY);
 
         super.onStop();
         unbindService(connection);
@@ -123,27 +137,48 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             }
         });
 
-        //Resultado, ronda y pts
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
-                int counter = Integer.parseInt(args[0].toString());
+        //Indicar la primera ronda al comienzo de la partida
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
+            try {
+                int round = ((JSONObject) args[0]).getInt(Constants.Keys.ROUND);
                 runOnUiThread(() -> {
-                    txTiempo.setText(counter + "s");
+                    txRonda.setText(round);
                 });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
 
-        //Puntuación
-        //TODO...
+        //Resultado, ronda y pts
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
+            try {
+                JSONObject info = (JSONObject) args[0];
+                int round = info.getInt(Constants.Keys.ROUND);
+
+                //TODO obtener chart y obtener puntos a partir de ahi
+                //TODO mostrar ranking
+                //String username = info.getString(Constants.Keys.USERNAME);
+                // String playerId = info.getString(Constants.Keys.PLAYER_ID);
+
+                runOnUiThread(() -> {
+                    //txPuntos.setText(points + "pts");
+                    txRonda.setText(round);
+                    btNones.setEnabled(true);
+                    btPares.setEnabled(true);
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
 
         //Ganador partida
-        //TODO...
+        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
+            //TODO mostrar ganador y volver a la pantalla inicial
+        });
 
-        //Resultado de la ronda
-        //TODO...
-
-    }
-
-    private void sendTurnInformation(){
-        //TODO enviar número y tipos escogidos por jugador
+        // Notify server when client is ready
+        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
 
     }
 }

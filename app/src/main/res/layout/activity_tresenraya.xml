@@ -33,6 +33,7 @@
         android:textSize="28sp" />
 
     <LinearLayout
+        android:id="@+id/pnInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/container"
