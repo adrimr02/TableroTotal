@@ -220,8 +220,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
                         Dialogs.showInfoDialog(WaitingRoomActivity.this,
                                 getString(R.string.not_enough_players),
                                 (DialogInterface dialog, int id) -> {
-                            moveToMainActivity();
-                        });
+                                    moveToMainActivity();
+                                });
                     });
                 }
             } catch (JSONException e) {
