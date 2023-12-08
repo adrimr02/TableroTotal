@@ -3,10 +3,13 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
 android {
     namespace 'com.japco.tablerototal'
     compileSdk 34
-
+    buildFeatures {
+        buildConfig true
+    }
     defaultConfig {
         applicationId "com.japco.tablerototal"
         minSdk 24
@@ -18,7 +21,17 @@ android {
     }
 
     buildTypes {
+        def SERVER_URL = "SERVER_URL"
+
+        def CONFIG = { k -> "\"${project.properties.get(k)}\"" }
+
+        debug {
+            buildConfigField "String", SERVER_URL, CONFIG("server.url")
+        }
+
         release {
+            buildConfigField "String", SERVER_URL, CONFIG("server.url")
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
