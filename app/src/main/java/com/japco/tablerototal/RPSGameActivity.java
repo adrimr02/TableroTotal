@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -51,8 +53,6 @@ public class RPSGameActivity extends AppCompatActivity {
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
             mBound = true;
-            socketService.getSocket().on(Constants.ServerEvents.MOVE_MADE, onMoveMade);
-            socketService.getSocket().on(Constants.ServerEvents.ROUND_RESULT, onRoundResult);
             addListeners();
         }
 
@@ -88,6 +88,12 @@ public class RPSGameActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        socketService.getSocket().off(Constants.ClientEvents.MOVE);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
+        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+        socketService.getSocket().off(Constants.ClientEvents.CLIENT_READY);
+
         super.onStop();
         unbindService(connection);
         mBound = false;
@@ -95,12 +101,10 @@ public class RPSGameActivity extends AppCompatActivity {
     //Actualiza valor crónometro
 
     private void addListeners() {
-
-        //Actualiza valor crónometro
+        // Tiempo restante
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
-                System.out.println(args[0]);
-                int counter = ((JSONObject) args[0]).getInt("counter");
+                int counter = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
                 runOnUiThread(() -> {
                     contador.setText(counter + "s");
                 });
@@ -108,58 +112,114 @@ public class RPSGameActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
+        // Indicar la primera ronda al comienzo de la partida
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
+            try {
+                int round = ((JSONObject) args[0]).getInt(Constants.Keys.ROUND);
+                runOnUiThread(() -> {
+                    numRondas.setText(String.valueOf(round)); // Corregido: convertir el valor de round a String
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Resultado, ronda y pts
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
+            try {
+                JSONObject info = (JSONObject) args[0];
+                int round = info.getInt(Constants.Keys.ROUND);
+                int points = info.getInt(Constants.Keys.POINTS);
+                String username = info.getString(Constants.Keys.USERNAME);
+                String winnerId = info.getString(Constants.Keys.WINNER);
+               // String chartData = info.getString(Constants.Keys.CHART_DATA);
+
+                runOnUiThread(() -> {
+                    player1.setText(username);
+                    player2.setText(username);
+                    //processChartAndPoints(chartData, points);
+                    numRondas.setText(String.valueOf(round));
+                    paper.setEnabled(true);
+                    rock.setEnabled(true);
+                    scissors.setEnabled(true);
+
+                    // Identificar el jugador que ganó
+
+                    updatePlayerScore(winnerId, points);
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Ganador partida
+        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
+            try {
+                JSONObject winnerInfo = (JSONObject) args[0];
+                String winnerName = winnerInfo.getString(Constants.Keys.USERNAME);
+
+                runOnUiThread(() -> {
+                    showWinner(winnerName);
+                    navigateToMainMenu();
+                });
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Notificar al servidor cuando el cliente está listo
+        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
     }
 
-    // Agrega el código para manejar el evento de jugada realizada
-    private final Emitter.Listener onMoveMade = args -> {
-        try {
-            // Manejar evento de jugada realizada
-            JSONObject moveData = (JSONObject) args[0];
-            String playerId = moveData.getString("playerId");int length = ((JSONObject) args[0]).getJSONArray("players").length();
-            connectedUsers.clear();
-
-            for(int i = 0; i < length; i++) {
-                JSONObject obj = ((JSONObject) args[0]).getJSONArray("players")
-                        .getJSONObject(i);
-                connectedUsers.add(new User(obj.getString("username"),null, null));
+    // Método para actualizar los puntos del jugador en función del ID del ganador
+    private void updatePlayerScore(String winnerName, int points) {
+        runOnUiThread(() -> {
+            if (winnerName.equals(player1.getText().toString())) {
+                // Actualizar el marcador del jugador 1
+                int currentPoints = Integer.parseInt(resultadoPlayer1.getText().toString());
+                resultadoPlayer1.setText(String.valueOf(currentPoints + points));
+            } else if (winnerName.equals(player2.getText().toString())) {
+                // Actualizar el marcador del jugador 2
+                int currentPoints = Integer.parseInt(resultadoPlayer2.getText().toString());
+                resultadoPlayer2.setText(String.valueOf(currentPoints + points));
             }
+        });
+    }
 
+    private void showWinner(String winnerName) {
+        // Inflar el diseño del diálogo
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_winner, null);
+        Dialog dialog = new Dialog(this);
 
-            // Actualizar la interfaz de usuario según sea necesario
-            runOnUiThread(() -> {
-                player1.setText(connectedUsers.get(0).toString());
-                player2.setText(connectedUsers.get(1).toString());
+        // Configurar el TextView con el nombre del ganador
+        TextView winnerTextView = dialogView.findViewById(R.id.textViewWinner);
+        winnerTextView.setText("¡Ganador!\n" + winnerName);
 
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    };
+        // Configurar el botón de Aceptar
+        Button dismissButton = dialogView.findViewById(R.id.buttonDismiss);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cerrar el diálogo cuando se hace clic en Aceptar
+                dialog.dismiss();
+            }
+        });
 
-    private final Emitter.Listener onRoundResult = args -> {
-        //TODO Daba error por que no era necesario tener el try/catch
-//        try {
-//            // Manejar evento de resultado del round
-//            JSONObject roundResult = (JSONObject) args[0];
-//            // Extraer la información del resultado y actualizar la interfaz de usuario
-//
-//            runOnUiThread(() -> {
-//            });
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-    };
+        // Crear el diálogo
+        dialog.setContentView(dialogView);
 
-    private void makeMove(String move) {
-        // Enviar la jugada al servidor
-        try {
-            JSONObject moveData = new JSONObject();
-            moveData.put("playerId", "player1"); // Puedes obtener el ID del jugador según sea necesario
-            moveData.put("move", move);
-            socketService.getSocket().emit(Constants.ClientEvents.MOVE, moveData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        // Mostrar el diálogo
+        dialog.show();
+    }
+
+    private void navigateToMainMenu() {
+        // TODO: Implementar la lógica para volver a la pantalla inicial
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish(); // Opcional: cerrar esta actividad si no se desea volver a ella
     }
 
 }

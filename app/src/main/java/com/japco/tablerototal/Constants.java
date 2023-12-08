@@ -4,7 +4,7 @@ public class Constants {
     public static final String[] GAMES = new String[] { "rock_paper_scissors", "tic_tac_toe", "even_odd" };
     public static final String USERNAME_EXTRA = "username";
     //public static final String SERVER_URL = BuildConfig.SERVER_URL;
-    public static final String SERVER_URL = "https://wws0z5kh-3000.uks1.devtunnels.ms/";
+    public static final String SERVER_URL = "http://localhost:3000";
     public static final String STATUS_OK = "ok";
     public static final String STATUS_ERROR = "error";
     public static final String NOT_ENOUGHT_PLAYERS = "not_enough_players";
@@ -25,6 +25,7 @@ public class Constants {
         public static final String MARK_AS_READY = "mark_as_ready";
         public static final String MOVE = "move";
 
+        public static final String CLIENT_READY = "client_ready";
     }
 
     public static final class ServerEvents {
@@ -36,11 +37,35 @@ public class Constants {
         public static final String START_GAME = "start_game";
 
         // Game
+        public static final String SHOW_INITIAL_INFO = "show_initial_info";
         public static final String NEXT_TURN = "next_turn";
         public static final String SHOW_TURN_RESULTS = "show_turn_results";
         public static final String FINISH_GAME = "finish_game";
-
         public static final String MOVE_MADE = "move_made";
         public static final String ROUND_RESULT = "round_result";
+
+    }
+
+    public static class Keys {
+        public static final String COUNTER = "counter";
+        public static final String PLAYERS = "players";
+        public static final String ID = "id";
+        public static final String USERNAME = "username";
+        public static final String SYMBOL = "symbol";
+        public static final String BOARD = "board";
+        public static final String TYPE = "type";
+        public static final String WINNER = "winner";
+        public static final String CELL = "cell";
+        public static final String POINTS = "points" ;
+        public static final String PLAYER_ID = "playerId" ;
+        public static final String ROUND = "round";
+    }
+
+    public static class ResultTypes {
+        public static final String DRAW = "draw";
+        public static final String WIN = "winner";
+        public static final String TIMEOUT  = "timeout";
+        public static final String RESIGNATION = "resignation";
+
     }
 }
