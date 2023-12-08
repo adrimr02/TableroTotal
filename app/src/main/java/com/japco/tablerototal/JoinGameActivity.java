@@ -28,7 +28,6 @@ public class JoinGameActivity extends AppCompatActivity {
     private EditText codeField;
 
     SocketService socketService;
-    private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -38,12 +37,11 @@ public class JoinGameActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            socketService = null;
         }
     };
 
@@ -81,7 +79,6 @@ public class JoinGameActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
-        mBound = false;
     }
 
     private void connect(String roomCode, String username) {
@@ -105,8 +102,6 @@ public class JoinGameActivity extends AppCompatActivity {
                 runOnUiThread(() -> Dialogs.showInfoDialog(JoinGameActivity.this,
                         R.string.join_error_message, (DialogInterface dialog, int id) -> {
                     dialog.dismiss();
-                    Intent intent = new Intent(JoinGameActivity.this, MainActivity.class);
-                    startActivity(intent);
                 }));
             } else {
                 enterGameView(game, roomCode);

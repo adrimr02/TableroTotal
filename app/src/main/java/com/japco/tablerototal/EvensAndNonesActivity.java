@@ -15,7 +15,6 @@ import com.japco.tablerototal.util.SocketService;
 public class EvensAndNonesActivity extends AppCompatActivity {
 
     SocketService socketService;
-    private boolean mBound;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -25,12 +24,11 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            socketService = null;
         }
     };
 
@@ -52,6 +50,5 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
-        mBound = false;
     }
 }

@@ -33,7 +33,6 @@ public class NewGameActivity extends AppCompatActivity {
     private Button createGameButton;
 
     SocketService socketService;
-    private boolean mBound;
 
     private String username;
     private String selectedGame = Constants.GAMES[1];
@@ -47,12 +46,11 @@ public class NewGameActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            mBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            socketService = null;
         }
     };
 
@@ -109,7 +107,6 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         unbindService(connection);
-        mBound = false;
     }
 
     private void checkButton(ToggleButton checkedButton) {
