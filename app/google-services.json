@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "98280711540",
+    "project_id": "tablerototal",
+    "storage_bucket": "tablerototal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98280711540:android:458498c97354ec52677821",
+        "android_client_info": {
+          "package_name": "com.japco.tablerototal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98280711540-fsf31d7fpcc9vn3a1rnqglurq1bhp5qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoEQGjCWcPFr5fNWjieDmeifyooJd71h8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98280711540-fsf31d7fpcc9vn3a1rnqglurq1bhp5qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
