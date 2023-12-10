@@ -5,6 +5,7 @@ import android.app.Application;
 public class MyApplication extends Application {
     private String username;
 
+
     public String getUsername() {
         return username;
     }

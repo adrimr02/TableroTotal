@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "98280711540",
+    "firebase_url": "https://tablerototal-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "tablerototal",
     "storage_bucket": "tablerototal.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "98280711540-lq808t4vbqfo0tuo3c4pqf8q0aqjd597.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.japco.tablerototal",
+            "certificate_hash": "c93a55dbad168e6eb2a73a1779a27e09aff29578"
+          }
+        },
         {
           "client_id": "98280711540-fsf31d7fpcc9vn3a1rnqglurq1bhp5qa.apps.googleusercontent.com",
           "client_type": 3

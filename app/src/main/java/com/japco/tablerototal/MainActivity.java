@@ -5,10 +5,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,10 +24,16 @@ public class MainActivity extends AppCompatActivity {
     RecordFragment recordFragment = new RecordFragment();
     FriendsFragment friendsFragment = new FriendsFragment();
 
+    private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        System.out.println("Main activity");
+
+        auth = FirebaseAuth.getInstance();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -40,6 +52,22 @@ public class MainActivity extends AppCompatActivity {
         });
         bottomNavigationView.setSelectedItemId(R.id.homeNavButton);
         Log.i("Navigation", String.valueOf(R.id.homeNavButton));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser user = auth.getCurrentUser();
+        System.out.println(user);
+        if (user == null) {
+            System.out.println("Moving to login activity");
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        } else {
+            ((MyApplication) getApplication()).setUsername(user.getDisplayName());
+            System.out.println(user.getDisplayName());
+        }
     }
 
     private void replaceFragment(Fragment fragment) {

@@ -42,4 +42,13 @@
     <string name="seconds">60s</string>
     <string name="not_ready">Not Ready</string>
     <string name="not_enough_players">No hay suficientes jugadores para la partida</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="confirm_btn">Sí</string>
+    <string name="cancel_btn">Cancelar</string>
+    <string name="logout_text">¿Seguro que quieres cerrar sesión?</string>
+    <string name="accept_btn">Aceptar</string>
+    <string name="welcome_title">Bienvenido a TableroTotal</string>
+    <string name="text_username">Escribe un numbre de usuario:</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="save_username">Guardar</string>
 </resources>

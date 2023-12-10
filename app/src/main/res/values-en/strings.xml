@@ -42,4 +42,13 @@
     <string name="seconds">60s</string>
     <string name="not_ready">Not Ready</string>
     <string name="not_enough_players">Not enough players for the match</string>
+    <string name="logout">Logout</string>
+    <string name="confirm_btn">Ok</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="logout_text">Do you want to log out?</string>
+    <string name="accept_btn">Ok</string>
+    <string name="welcome_title">Welcome to TableroTotal</string>
+    <string name="text_username">Write a username:</string>
+    <string name="username">Username</string>
+    <string name="save_username">Save</string>
 </resources>

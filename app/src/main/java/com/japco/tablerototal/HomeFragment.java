@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.japco.tablerototal.util.Connection;
 import com.japco.tablerototal.util.Dialogs;
 
@@ -25,11 +27,15 @@ public class HomeFragment extends Fragment {
     private EditText editUsername;
     private Button createGameButton;
     private Button joinGameButton;
+    private Button btnLogout;
+
+    private FirebaseAuth auth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        auth = FirebaseAuth.getInstance();
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -39,10 +45,11 @@ public class HomeFragment extends Fragment {
         createGameButton = view.findViewById(R.id.buttonCreateGame);
         joinGameButton = view.findViewById(R.id.buttonJoinGame);
 
-        String username = ((MyApplication) requireActivity().getApplication()).getUsername();
-        if (username != null) {
-            editUsername.setText(username);
-        }
+        btnLogout = view.findViewById(R.id.btnLogout);
+
+        btnLogout.setOnClickListener(v -> {
+            logout();
+        });
 
         createGameButton.setOnClickListener(v -> {
             if (!isValid()) return;
@@ -62,6 +69,22 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            String username = auth.getCurrentUser().getDisplayName();
+            if (username != null) {
+                editUsername.setText(username);
+            }
+        } else {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+
     private boolean isValid() {
         boolean hasConnection = new Connection(getActivity()).checkConnection();
         if (!hasConnection) {
@@ -69,11 +92,16 @@ public class HomeFragment extends Fragment {
             return false;
         }
 
-        if (editUsername.getText().toString().trim().isEmpty()) {
-            Dialogs.showInfoDialog(getActivity(), R.string.no_nickname_dialog_message);
-            return false;
-        }
         ((MyApplication) requireActivity().getApplication()).setUsername(editUsername.getText().toString().trim());
         return true;
+    }
+
+    private void logout() {
+        Dialogs.showConfirmDialog(getContext(), R.string.logout_text, (d,i) -> {
+            d.dismiss();
+            auth.signOut();
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
     }
 }

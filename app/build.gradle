@@ -57,11 +57,11 @@ dependencies {
     }
 
     // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.6.0')
-    implementation 'com.google.firebase:firebase-analytics'
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.android.gms:play-services-auth:20.7.0'
-    implementation "androidx.credentials:credentials:1.2.0"
+    implementation("com.google.firebase:firebase-firestore")
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

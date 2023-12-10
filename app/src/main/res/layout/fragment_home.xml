@@ -25,9 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:allowUndo="false"
         android:autofillHints="username"
         android:backgroundTint="@color/white"
+        android:clickable="false"
+        android:editable="false"
         android:ems="10"
+        android:enabled="false"
         android:hint="@string/username_field"
         android:inputType="text"
         android:textAlignment="center"
@@ -82,5 +86,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreateGame"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFF0000"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/homeTextTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
