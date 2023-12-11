@@ -1,9 +1,5 @@
 package com.japco.tablerototal;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,9 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.model.User;
-import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
 import org.json.JSONArray;
@@ -26,9 +24,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-import io.socket.emitter.Emitter;
+import java.util.Map;
 
 public class RPSGameActivity extends AppCompatActivity {
 
@@ -78,6 +77,37 @@ public class RPSGameActivity extends AppCompatActivity {
         scissors = findViewById(R.id.buttonScissors);
         contador = findViewById(R.id.contador);
         numRondas = findViewById(R.id.numRondas);
+
+        // Agregar OnClickListener a los botones
+        rock.setOnClickListener(v -> onButtonClick("rock"));
+        paper.setOnClickListener(v -> onButtonClick("paper"));
+        scissors.setOnClickListener(v -> onButtonClick("scissors"));
+    }
+
+    private void onButtonClick(String move) {
+        if (!socketService.getSocket().connected()) {
+            // Verificar si el socket está conectado antes de enviar el movimiento
+            showToast("Esperando conexión al servidor");
+            return;
+        }
+
+        // Desactivar los botones después de hacer clic
+        rock.setEnabled(false);
+        paper.setEnabled(false);
+        scissors.setEnabled(false);
+
+        // Enviar el movimiento al servidor
+        socketService.getSocket().emit(Constants.ClientEvents.MOVE, move);
+    }
+
+    private void setButtonDisabledColor(ImageButton button) {
+        // Cambiar el color del botón cuando está desactivado (puedes ajustar el color según tus necesidades)
+        button.setColorFilter(getResources().getColor(R.color.gray));
+    }
+
+    private void showToast(String message) {
+        // Método para mostrar un aviso tipo Toast
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -100,7 +130,7 @@ public class RPSGameActivity extends AppCompatActivity {
         unbindService(connection);
         mBound = false;
     }
-    //Actualiza valor crónometro
+    // Actualiza valor crónometro
 
     private void addListeners() {
         // Tiempo restante
@@ -132,7 +162,8 @@ public class RPSGameActivity extends AppCompatActivity {
                         playerNames[0].setText(players[0].username);
                         playerNames[1].setText(players[1].username);
                     }
-                    numRondas.setText(String.valueOf(round)); // Corregido: convertir el valor de round a String
+                    //numRondas.setText(String.valueOf(round)); // Corregido: convertir el valor de round a String
+                    enableButtons();
 
                 });
             } catch (JSONException e) {
@@ -144,21 +175,36 @@ public class RPSGameActivity extends AppCompatActivity {
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
             try {
                 JSONObject info = (JSONObject) args[0];
-                int round = info.getInt(Constants.Keys.ROUND);
-                int points = info.getInt(Constants.Keys.POINTS);
-                String winnerId = info.getString(Constants.Keys.WINNER);
-                // String chartData = info.getString(Constants.Keys.CHART_DATA);
+                System.out.println(info);
+
+                int round = info.getInt(Constants.Keys.ROUND) + 1;
+
+                // Obtén los puntos de cada jugador del objeto 'points'
+                JSONObject pointsObject = info.getJSONObject(Constants.Keys.POINTS);
+                Map<String, Integer> playerPoints = new HashMap<>();
+                Iterator<String> keys = pointsObject.keys();
+                while (keys.hasNext()) {
+                    String playerId = keys.next();
+                    int points = pointsObject.isNull(playerId) ? 0 : pointsObject.getInt(playerId);
+                    playerPoints.put(playerId, points);
+                }
 
                 runOnUiThread(() -> {
-                    //processChartAndPoints(chartData, points);
+                    // Update round number
                     numRondas.setText(String.valueOf(round));
+
+                    // Enable buttons after round results are shown
                     paper.setEnabled(true);
                     rock.setEnabled(true);
                     scissors.setEnabled(true);
 
-                    // Identificar el jugador que ganó
+                    // Iterate through the playerPoints map and update player scores
+                    for (Map.Entry<String, Integer> entry : playerPoints.entrySet()) {
+                        updatePlayerScore(entry.getKey(), entry.getValue());
+                    }
 
-                    updatePlayerScore(winnerId, points);
+                    System.out.println(info.optString(Constants.Keys.WINNER));
+                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
                 });
 
             } catch (JSONException e) {
@@ -170,12 +216,19 @@ public class RPSGameActivity extends AppCompatActivity {
         socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
             try {
                 JSONObject winnerInfo = (JSONObject) args[0];
-                String winnerName = winnerInfo.getString(Constants.Keys.USERNAME);
 
-                runOnUiThread(() -> {
-                    showWinner(winnerName);
-                    navigateToMainMenu();
-                });
+                // Verificar si la propiedad "username" está presente en el objeto
+                if (winnerInfo.has(Constants.Keys.WINNER)) {
+                    String winnerName = winnerInfo.getString(Constants.Keys.WINNER);
+
+                    runOnUiThread(() -> {
+                        showWinner(winnerName);
+                    });
+                } else {
+                    // Manejar el caso en el que "username" no está presente
+                    // Puedes imprimir un mensaje de error o realizar otra acción según tus necesidades
+                    System.err.println("El objeto winnerInfo no contiene la propiedad 'username'");
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -186,9 +239,49 @@ public class RPSGameActivity extends AppCompatActivity {
         socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
     }
 
-    // Método para actualizar los puntos del jugador en función del ID del ganador
-    private void updatePlayerScore(String winnerName, int points) {
+    private void enableButtons() {
+        runOnUiThread(() -> {
+            rock.setEnabled(true);
+            paper.setEnabled(true);
+            scissors.setEnabled(true);
+        });
+    }
 
+    private void showRoundWinner(String winnerId) {
+        for (Player player : players) {
+            if (player.getId().equals(winnerId)) {
+                // Inflating the winner message view from dialog_winner_round.xml
+                View winnerMessageView = LayoutInflater.from(this).inflate(R.layout.dialog_winner, null);
+                TextView winnerMessageTextView = winnerMessageView.findViewById(R.id.textViewWinner);
+                winnerMessageTextView.setText("¡" + player.getUsername() + " ganó la ronda!");
+
+                // Creating and showing the dialog
+                Dialog winnerRoundDialog = new Dialog(this);
+                winnerRoundDialog.setContentView(winnerMessageView);
+                winnerRoundDialog.show();
+                break;
+            }
+        }
+    }
+
+    // Método para actualizar los puntos del jugador en función del ID del ganador
+    private void updatePlayerScore(String winnerId, int points) {
+        // Registro para comprobar si se llama al método
+        System.out.println("updatePlayerScore llamado con winnerId: " + winnerId + ", points: " + points);
+
+        // Actualizar los puntos del jugador según el ID del ganador
+        for (Player player : players) {
+            if (player.getId().equals(winnerId)) {
+                player.setPoints(points);
+                break;
+            }
+        }
+
+        // Actualizar la interfaz de usuario con los nuevos puntos
+        runOnUiThread(() -> {
+            resultadoPlayer1.setText(String.valueOf(players[0].getPoints()));
+            resultadoPlayer2.setText(String.valueOf(players[1].getPoints()));
+        });
     }
 
     private void showWinner(String winnerName) {
@@ -202,12 +295,9 @@ public class RPSGameActivity extends AppCompatActivity {
 
         // Configurar el botón de Aceptar
         Button dismissButton = dialogView.findViewById(R.id.buttonDismiss);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Cerrar el diálogo cuando se hace clic en Aceptar
-                dialog.dismiss();
-            }
+        dismissButton.setOnClickListener(v -> {
+            // Cerrar el diálogo cuando se hace clic en Aceptar
+            dialog.dismiss();
         });
 
         // Crear el diálogo
@@ -217,23 +307,15 @@ public class RPSGameActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void navigateToMainMenu() {
-        // TODO: Implementar la lógica para volver a la pantalla inicial
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Opcional: cerrar esta actividad si no se desea volver a ella
-    }
-
-
     private class Player {
         private final String id;
         private final String username;
-        private final int number;
+        private int points;
 
-        public Player (String id, String username,  int number) {
+        public Player (String id, String username, int points) {
             this.id = id;
             this.username = username;
-            this.number = number;
+            this.points = points;
         }
 
         public String getId() {
@@ -244,8 +326,12 @@ public class RPSGameActivity extends AppCompatActivity {
             return this.username;
         }
 
-        public int getNumber() {
-            return this.number;
+        public int getPoints() {
+            return this.points;
+        }
+
+        public void setPoints(int points) {
+            this.points = points;
         }
     }
 }
