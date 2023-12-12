@@ -59,6 +59,7 @@ public class Constants {
         public static final String POINTS = "points" ;
         public static final String PLAYER_ID = "playerId" ;
         public static final String ROUND = "round";
+        public static final String CHART = "chart";
     }
 
     public static class ResultTypes {

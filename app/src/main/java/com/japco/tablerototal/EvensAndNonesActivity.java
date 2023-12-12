@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     TextView txPuntos;
     TextView txRonda;
     String username;
+    String userId;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -35,6 +38,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
                                        IBinder service) {
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
+            userId = socketService.getSocket().id();
 
             addListeners();
         }
@@ -64,18 +68,19 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             moveToMainActivity();
         });
 
+        //Enviamos la repuesta del jugador, su identificación la posee el servidor
+
         btNones.setOnClickListener(v -> {
             try {
                 JSONObject obj  = new JSONObject();
-                //TODO enviar nombre
-                obj.put("numberType", "Nones");
+                obj.put("numberType", "nones");
                 obj.put("number", Integer.parseInt(txNumero.getText().toString()));
                 socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+            //Desactivamos los botones para evitar más respuestas
             btPares.setEnabled(false);
             btNones.setEnabled(false);
         });
@@ -83,15 +88,14 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         btPares.setOnClickListener(v -> {
             try {
                 JSONObject obj  = new JSONObject();
-                //TODO enviar nombre
-                obj.put("numberType", "Pares");
+                obj.put("numberType", "evens");
                 obj.put("number", Integer.parseInt(txNumero.getText().toString()));
                 socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+            //Desactivamos los botones para evitar más respuestas
             btPares.setEnabled(false);
             btNones.setEnabled(false);
         });
@@ -113,14 +117,13 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        super.onStop();
 
-        socketService.getSocket().off(Constants.ClientEvents.MOVE);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
         socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
-        socketService.getSocket().off(Constants.ClientEvents.CLIENT_READY);
 
-        super.onStop();
         unbindService(connection);
     }
 
@@ -149,24 +152,35 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             }
         });
 
-        //Resultado, ronda y pts
+        //Obtener siguiente ronda y puntos del jugador
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
+            int points = 0;
+
             try {
                 JSONObject info = (JSONObject) args[0];
-                int round = info.getInt(Constants.Keys.ROUND);
 
-                //TODO obtener chart y obtener puntos a partir de ahi
-                //TODO mostrar ranking
-                //String username = info.getString(Constants.Keys.USERNAME);
-                // String playerId = info.getString(Constants.Keys.PLAYER_ID);
+                int round = info.getInt(Constants.Keys.ROUND);
+                JSONArray chart = info.getJSONArray(Constants.Keys.CHART);
+
+                for(int i = 0; i < chart.length(); i++){
+                    JSONObject obj = chart.getJSONObject(i);
+                    String id = obj.getString(Constants.Keys.PLAYER_ID);
+                    if(id.equals(userId)){
+                        points = obj.getInt(Constants.Keys.POINTS);
+                        break;
+                    }
+                }
+
+                int finalPoints = points;
 
                 runOnUiThread(() -> {
-                    //txPuntos.setText(points + "pts");
+                    txPuntos.setText(finalPoints + "pts");
                     txRonda.setText(round);
                     btNones.setEnabled(true);
                     btPares.setEnabled(true);
                 });
 
+                //TODO mostrar ranking
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -174,7 +188,23 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
         //Ganador partida
         socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
-            //TODO mostrar ganador y volver a la pantalla inicial
+            try {
+                JSONObject obj = (JSONObject) args[0];
+                String winner = obj.getString(Constants.Keys.WINNER);
+                int winnerPoints = obj.getInt(Constants.Keys.POINTS);
+
+                String message = "¡" + winner + " ha ganado la partida con "
+                        + winnerPoints + " puntos!";
+
+                runOnUiThread(() -> {
+                    Dialogs.showInfoDialog(this, message, (dialog, which) -> {
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                    });
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
 
         // Notify server when client is ready
