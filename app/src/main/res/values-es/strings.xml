@@ -43,4 +43,5 @@
     <string name="not_ready">Not Ready</string>
     <string name="not_enough_players">No hay suficientes jugadores para la partida</string>
     <string name="points">1234pts</string>
+    <string name="Ranking">Ranking</string>
 </resources>

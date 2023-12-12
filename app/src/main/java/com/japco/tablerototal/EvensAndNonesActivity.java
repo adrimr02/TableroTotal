@@ -28,6 +28,9 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     TextView txTiempo;
     TextView txPuntos;
     TextView txRonda;
+    TextView txTop1;
+    TextView txTop2;
+    TextView txTop3;
     String username;
     String userId;
 
@@ -63,6 +66,9 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         txRonda = findViewById(R.id.txNumeroRonda);
         txTiempo = findViewById(R.id.txTiempoRonda);
         txPuntos = findViewById(R.id.txPuntos);
+        txTop1 = findViewById(R.id.txTop1);
+        txTop2 = findViewById(R.id.txTop2);
+        txTop3 = findViewById(R.id.txTop3);
 
         btSalir.setOnClickListener(v -> {
             moveToMainActivity();
@@ -98,6 +104,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             //Desactivamos los botones para evitar más respuestas
             btPares.setEnabled(false);
             btNones.setEnabled(false);
+            txNumero.setEnabled(false);
         });
     }
 
@@ -173,14 +180,30 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
                 int finalPoints = points;
 
+                JSONObject top1 = chart.getJSONObject(1);
+                String top1Username = top1.getString(Constants.Keys.USERNAME);
+                int top1Points = top1.getInt(Constants.Keys.POINTS);
+
+                JSONObject top2 = chart.getJSONObject(2);
+                String top2Username = top2.getString(Constants.Keys.USERNAME);
+                int top2Points = top2.getInt(Constants.Keys.POINTS);
+
+                JSONObject top3 = chart.getJSONObject(3);
+                String top3Username = top3.getString(Constants.Keys.USERNAME);
+                int top3Points = top3.getInt(Constants.Keys.POINTS);
+
                 runOnUiThread(() -> {
                     txPuntos.setText(finalPoints + "pts");
                     txRonda.setText(round);
                     btNones.setEnabled(true);
                     btPares.setEnabled(true);
+                    txNumero.setEnabled(true);
+                    txNumero.setText("");
+                    txTop1.setText("1. " + top1Username + "  (" + top1Points +"pts)" );
+                    txTop1.setText("2. " + top2Username + "  (" + top2Points +"pts)" );
+                    txTop1.setText("3. " + top3Username + "  (" + top3Points +"pts)" );
                 });
 
-                //TODO mostrar ranking
             } catch (JSONException e) {
                 e.printStackTrace();
             }
