@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     TextView txTop1;
     TextView txTop2;
     TextView txTop3;
+    TextView txRanking;
     String username;
     String userId;
 
@@ -63,12 +65,13 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         btPares =  findViewById(R.id.botonPares);
         btSalir = findViewById(R.id.btSalir);
         txNumero = findViewById(R.id.txNumero);
-        txRonda = findViewById(R.id.txNumeroRonda);
+        txRonda = findViewById(R.id.txNumeroRondaOE);
         txTiempo = findViewById(R.id.txTiempoRonda);
         txPuntos = findViewById(R.id.txPuntos);
         txTop1 = findViewById(R.id.txTop1);
         txTop2 = findViewById(R.id.txTop2);
         txTop3 = findViewById(R.id.txTop3);
+        txRanking = findViewById(R.id.txRanking);
 
         btSalir.setOnClickListener(v -> {
             moveToMainActivity();
@@ -77,34 +80,39 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         //Enviamos la repuesta del jugador, su identificación la posee el servidor
 
         btNones.setOnClickListener(v -> {
-            try {
-                JSONObject obj  = new JSONObject();
-                obj.put("numberType", "nones");
-                obj.put("number", Integer.parseInt(txNumero.getText().toString()));
-                socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            if(!txNumero.getText().equals("")) {
+                try {
+                    JSONObject obj = new JSONObject();
+                    obj.put("numberType", "nones");
+                    obj.put("number", Integer.parseInt(txNumero.getText().toString()));
+                    socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            //Desactivamos los botones para evitar más respuestas
-            btPares.setEnabled(false);
-            btNones.setEnabled(false);
+                //Desactivamos los botones para evitar más respuestas
+                btPares.setEnabled(false);
+                btNones.setEnabled(false);
+                txNumero.setEnabled(false);
+            }
         });
 
         btPares.setOnClickListener(v -> {
-            try {
-                JSONObject obj  = new JSONObject();
-                obj.put("numberType", "evens");
-                obj.put("number", Integer.parseInt(txNumero.getText().toString()));
-                socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            if(!txNumero.getText().equals("")){
+                try {
+                    JSONObject obj  = new JSONObject();
+                    obj.put("numberType", "evens");
+                    obj.put("number", Integer.parseInt(txNumero.getText().toString()));
+                    socketService.getSocket().emit(Constants.ClientEvents.MOVE, obj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-            //Desactivamos los botones para evitar más respuestas
-            btPares.setEnabled(false);
-            btNones.setEnabled(false);
-            txNumero.setEnabled(false);
+                //Desactivamos los botones para evitar más respuestas
+                btPares.setEnabled(false);
+                btNones.setEnabled(false);
+                txNumero.setEnabled(false);
+            }
         });
     }
 
@@ -152,7 +160,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
             try {
                 int round = ((JSONObject) args[0]).getInt(Constants.Keys.ROUND);
                 runOnUiThread(() -> {
-                    txRonda.setText(round);
+                    txRonda.setText(String.valueOf(round));
                 });
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -162,6 +170,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         //Obtener siguiente ronda y puntos del jugador
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
             int points = 0;
+            System.out.println("PRUEBA");
 
             try {
                 JSONObject info = (JSONObject) args[0];
@@ -180,28 +189,60 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
                 int finalPoints = points;
 
-                JSONObject top1 = chart.getJSONObject(1);
-                String top1Username = top1.getString(Constants.Keys.USERNAME);
-                int top1Points = top1.getInt(Constants.Keys.POINTS);
+                String top1Username;
+                String top1Points;
 
-                JSONObject top2 = chart.getJSONObject(2);
-                String top2Username = top2.getString(Constants.Keys.USERNAME);
-                int top2Points = top2.getInt(Constants.Keys.POINTS);
+                //TODO mejorar este código
+                if(chart.length() > 0){
+                JSONObject top1 = chart.getJSONObject(0);
+                top1Username = top1.getString(Constants.Keys.USERNAME);
+                top1Points = "(" + String.valueOf(top1.getInt(Constants.Keys.POINTS) + "pts)");
+                } else {
+                    top1Username = "";
+                    top1Points = "";
+                }
 
-                JSONObject top3 = chart.getJSONObject(3);
-                String top3Username = top3.getString(Constants.Keys.USERNAME);
-                int top3Points = top3.getInt(Constants.Keys.POINTS);
+                String top2Username;
+                String top2Points;
+
+                if(chart.length() > 1) {
+                    JSONObject top2 = chart.getJSONObject(1);
+                    top2Username = top2.getString(Constants.Keys.USERNAME);
+                    top2Points = "(" + String.valueOf(top2.getInt(Constants.Keys.POINTS) + "pts)");
+                } else {
+                    top2Username = "";
+                    top2Points = "";
+                }
+
+                String top3Username;
+                String top3Points;
+
+                if(chart.length() > 2){
+                    JSONObject top3 = chart.getJSONObject(2);
+                    top3Username = top3.getString(Constants.Keys.USERNAME);
+                    top3Points = "(" + String.valueOf(top3.getInt(Constants.Keys.POINTS) + "pts)");
+                } else {
+                    top3Points = "";
+                    top3Username = "";
+                }
 
                 runOnUiThread(() -> {
                     txPuntos.setText(finalPoints + "pts");
-                    txRonda.setText(round);
+                    txRonda.setText(String.valueOf(round));
                     btNones.setEnabled(true);
                     btPares.setEnabled(true);
                     txNumero.setEnabled(true);
                     txNumero.setText("");
-                    txTop1.setText("1. " + top1Username + "  (" + top1Points +"pts)" );
-                    txTop1.setText("2. " + top2Username + "  (" + top2Points +"pts)" );
-                    txTop1.setText("3. " + top3Username + "  (" + top3Points +"pts)" );
+                    txTop1.setText("1. " + top1Username + " " + top1Points);
+                    txTop2.setText("2. " + top2Username + " " + top2Points);
+                    txTop3.setText("3. " + top3Username + " " + top3Points);
+
+                    if(round == 2){
+                        txTop1.setVisibility(View.VISIBLE);
+                        txTop2.setVisibility(View.VISIBLE);
+                        txTop3.setVisibility(View.VISIBLE);
+                        txRanking.setVisibility(View.VISIBLE);
+                    }
                 });
 
             } catch (JSONException e) {
