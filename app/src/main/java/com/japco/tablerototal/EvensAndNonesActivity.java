@@ -21,6 +21,10 @@ import org.json.JSONObject;
 
 public class EvensAndNonesActivity extends AppCompatActivity {
 
+    //TODO gestionar empates
+
+    //TODO personalizar rondas
+
     SocketService socketService;
     Button btPares;
     Button btNones;
@@ -29,9 +33,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
     TextView txTiempo;
     TextView txPuntos;
     TextView txRonda;
-    TextView txTop1;
-    TextView txTop2;
-    TextView txTop3;
+    TextView[] ranking;
     TextView txRanking;
     String username;
     String userId;
@@ -68,9 +70,11 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         txRonda = findViewById(R.id.txNumeroRondaOE);
         txTiempo = findViewById(R.id.txTiempoRonda);
         txPuntos = findViewById(R.id.txPuntos);
-        txTop1 = findViewById(R.id.txTop1);
-        txTop2 = findViewById(R.id.txTop2);
-        txTop3 = findViewById(R.id.txTop3);
+        ranking = new TextView[]{
+                findViewById(R.id.txTop1),
+                findViewById(R.id.txTop2),
+                findViewById(R.id.txTop3)
+        };
         txRanking = findViewById(R.id.txRanking);
 
         btSalir.setOnClickListener(v -> {
@@ -78,9 +82,8 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         });
 
         //Enviamos la repuesta del jugador, su identificación la posee el servidor
-
         btNones.setOnClickListener(v -> {
-            if(!txNumero.getText().equals("")) {
+            if(!txNumero.getText().toString().equals("")) {
                 try {
                     JSONObject obj = new JSONObject();
                     obj.put("numberType", "nones");
@@ -98,7 +101,7 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         });
 
         btPares.setOnClickListener(v -> {
-            if(!txNumero.getText().equals("")){
+            if(!txNumero.getText().toString().equals("")){
                 try {
                     JSONObject obj  = new JSONObject();
                     obj.put("numberType", "evens");
@@ -170,7 +173,6 @@ public class EvensAndNonesActivity extends AppCompatActivity {
         //Obtener siguiente ronda y puntos del jugador
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
             int points = 0;
-            System.out.println("PRUEBA");
 
             try {
                 JSONObject info = (JSONObject) args[0];
@@ -189,41 +191,21 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
                 int finalPoints = points;
 
-                String top1Username;
-                String top1Points;
+                for(int i = 0; i < chart.length(); i++) {
+                    if (i == 3) {
+                        break;
+                    }
 
-                //TODO mejorar este código
-                if(chart.length() > 0){
-                JSONObject top1 = chart.getJSONObject(0);
-                top1Username = top1.getString(Constants.Keys.USERNAME);
-                top1Points = "(" + String.valueOf(top1.getInt(Constants.Keys.POINTS) + "pts)");
-                } else {
-                    top1Username = "";
-                    top1Points = "";
-                }
+                    JSONObject obj = chart.getJSONObject(i);
+                    String topUsername = obj.getString(Constants.Keys.USERNAME);
+                    int topPoints = obj.getInt(Constants.Keys.POINTS);
 
-                String top2Username;
-                String top2Points;
-
-                if(chart.length() > 1) {
-                    JSONObject top2 = chart.getJSONObject(1);
-                    top2Username = top2.getString(Constants.Keys.USERNAME);
-                    top2Points = "(" + String.valueOf(top2.getInt(Constants.Keys.POINTS) + "pts)");
-                } else {
-                    top2Username = "";
-                    top2Points = "";
-                }
-
-                String top3Username;
-                String top3Points;
-
-                if(chart.length() > 2){
-                    JSONObject top3 = chart.getJSONObject(2);
-                    top3Username = top3.getString(Constants.Keys.USERNAME);
-                    top3Points = "(" + String.valueOf(top3.getInt(Constants.Keys.POINTS) + "pts)");
-                } else {
-                    top3Points = "";
-                    top3Username = "";
+                    String message = (i + 1) + ". " + topUsername + " (" + topPoints + "pts)";
+                    TextView tx = ranking[i];
+                    runOnUiThread(() -> {
+                        tx.setText(message);
+                        tx.setVisibility(View.VISIBLE);
+                    });
                 }
 
                 runOnUiThread(() -> {
@@ -233,14 +215,8 @@ public class EvensAndNonesActivity extends AppCompatActivity {
                     btPares.setEnabled(true);
                     txNumero.setEnabled(true);
                     txNumero.setText("");
-                    txTop1.setText("1. " + top1Username + " " + top1Points);
-                    txTop2.setText("2. " + top2Username + " " + top2Points);
-                    txTop3.setText("3. " + top3Username + " " + top3Points);
 
-                    if(round == 2){
-                        txTop1.setVisibility(View.VISIBLE);
-                        txTop2.setVisibility(View.VISIBLE);
-                        txTop3.setVisibility(View.VISIBLE);
+                    if(chart.length() > 0){
                         txRanking.setVisibility(View.VISIBLE);
                     }
                 });
