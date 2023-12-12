@@ -82,6 +82,12 @@ public class RPSGameActivity extends AppCompatActivity {
         rock.setOnClickListener(v -> onButtonClick("rock"));
         paper.setOnClickListener(v -> onButtonClick("paper"));
         scissors.setOnClickListener(v -> onButtonClick("scissors"));
+
+        Button leaveGameButton = findViewById(R.id.buttonLeave);
+        leaveGameButton.setOnClickListener(v -> {
+            // Lógica para navegar hacia atrás
+            onBackPressed();
+        });
     }
 
     private void onButtonClick(String move) {
