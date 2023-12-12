@@ -3,8 +3,8 @@ package com.japco.tablerototal;
 public class Constants {
     public static final String[] GAMES = new String[] { "rock_paper_scissors", "tic_tac_toe", "even_odd" };
     public static final String USERNAME_EXTRA = "username";
-    //public static final String SERVER_URL = BuildConfig.SERVER_URL;
-    public static final String SERVER_URL = "https://wws0z5kh-3000.uks1.devtunnels.ms/L";
+    public static final String SERVER_URL = BuildConfig.SERVER_URL;
+    //public static final String SERVER_URL = "https://wws0z5kh-3000.uks1.devtunnels.ms/L";
     public static final String STATUS_OK = "ok";
     public static final String STATUS_ERROR = "error";
     public static final String NOT_ENOUGHT_PLAYERS = "not_enough_players";
@@ -24,7 +24,6 @@ public class Constants {
         public static final String CREATE_GAME = "create";
         public static final String MARK_AS_READY = "mark_as_ready";
         public static final String MOVE = "move";
-
         public static final String CLIENT_READY = "client_ready";
     }
 
