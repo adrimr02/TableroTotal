@@ -52,6 +52,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     TextView cronometro;
     TextView codigo;
     boolean mBound;
+    String username;
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -79,6 +80,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         this.roomCode = getIntent().getStringExtra("roomCode");
         this.game = getIntent().getStringExtra("game");
+        this.username = getIntent().getStringExtra("username");
 
         volver = findViewById(R.id.btAtras);
         connectedUsersView = (RecyclerView)findViewById(R.id.rcylConnectedUsers);
@@ -165,7 +167,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
         //Actualiza valor crónometro
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
-                System.out.println(args[0]);
                 int counter = ((JSONObject) args[0]).getInt("counter");
                 runOnUiThread(() -> {
                     cronometro.setText(counter + "s");
@@ -259,6 +260,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         } else {
             return;
         }
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 }

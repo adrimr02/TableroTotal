@@ -42,4 +42,10 @@
     <string name="seconds">60s</string>
     <string name="not_ready">Not Ready</string>
     <string name="not_enough_players">Not enough players for the match</string>
+    <string name="points">0pts</string>
+    <string name="Ranking">Ranking</string>
+    <string name="Pares">Evens</string>
+    <string name="Nones">Odds</string>
+    <string name="winner_dialog">The winner is %s!</string>
+    <string name="draw_dialog">It was a draw!</string>
 </resources>

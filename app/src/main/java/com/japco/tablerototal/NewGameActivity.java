@@ -183,6 +183,7 @@ public class NewGameActivity extends AppCompatActivity {
         Intent intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
         intent.putExtra("roomCode", roomCode);
         intent.putExtra("game", game);
+        intent.putExtra("username", username);
 
         startActivity(intent);
     }

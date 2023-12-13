@@ -10,7 +10,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/buttonLeave"
+        android:id="@+id/btSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -33,6 +33,7 @@
         android:textSize="28sp" />
 
     <LinearLayout
+        android:id="@+id/pnInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/container"

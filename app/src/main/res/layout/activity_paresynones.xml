@@ -13,49 +13,41 @@
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Pares y Nones"
+        android:text="@string/EvensAndNones"
         android:textColor="#FFFFFF"
         android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerNameEditText" />
-
-    <EditText
-        android:id="@+id/playerNameEditText"
-        android:layout_width="287dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        android:hint="Nombre del Jugador"
-        android:textAlignment="center"
-        android:textColor="#050505"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Oponente" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.328" />
 
     <Button
-        android:id="@+id/buttonLeave"
+        android:id="@+id/btSalir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/danger"
         android:text="@string/button_leave"
+        app:layout_constraintBottom_toTopOf="@+id/txTiempoRonda"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/paresyNones"
         android:layout_width="278dp"
         android:layout_height="84dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="26dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
+        app:layout_constraintTop_toBottomOf="@+id/txNumero"
+        app:layout_constraintVertical_bias="0.0">
 
         <Button
             android:id="@+id/botonPares"
@@ -63,7 +55,7 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:background="#dbdbdb"
-            android:text="Pares"
+            android:text="@string/Pares"
             android:textColor="#0E0E0E" />
 
         <Button
@@ -71,56 +63,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#dbdbdb"
-            android:text="Nones"
+            android:text="@string/Nones"
             android:textColor="#0E0E0E" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/turnTextView"
-        android:layout_width="162dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="196dp"
-        android:background="#dbdbdb"
-        android:gravity="center"
-        android:text="Tú Turno"
-        android:textAlignment="center"
-        android:textColor="#100F0F"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paresyNones"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/Oponente"
-        android:layout_width="131dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="104dp"
-        android:gravity="center"
-        android:text="@string/opponent"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="20dp"
         android:text="@string/game_round"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/buttonLeave"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/txTiempoRonda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btSalir"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.009" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/txNumeroRondaOE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1"
@@ -129,5 +91,112 @@
         app:layout_constraintHorizontal_bias="0.192"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+    <EditText
+        android:id="@+id/txNumero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintVertical_bias="0.087" />
+
+    <TextView
+        android:id="@+id/txTiempoRonda"
+        android:layout_width="84dp"
+        android:layout_height="60dp"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/titleTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.819" />
+
+    <TextView
+        android:id="@+id/txPuntos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/points"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/txTiempoRonda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.921"
+        app:layout_constraintStart_toEndOf="@+id/btSalir"
+        app:layout_constraintTop_toBottomOf="@+id/txNumeroRondaOE"
+        app:layout_constraintVertical_bias="0.114" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pnRanking"
+        android:layout_width="233dp"
+        android:layout_height="122dp"
+        android:layout_marginTop="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.561"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paresyNones">
+
+        <TextView
+            android:id="@+id/txTop1"
+            android:layout_width="231dp"
+            android:layout_height="32dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txTop3"
+            android:layout_width="231dp"
+            android:layout_height="28dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.872" />
+
+        <TextView
+            android:id="@+id/txTop2"
+            android:layout_width="231dp"
+            android:layout_height="35dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/txTop3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txTop1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txRanking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="@string/Ranking"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/pnRanking"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paresyNones"
+        app:layout_constraintVertical_bias="0.925" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

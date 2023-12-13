@@ -1,6 +1,5 @@
 package com.japco.tablerototal;
 
-import android.app.usage.ConfigurationStats;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -75,7 +74,7 @@ public class TicTacToeActivity extends AppCompatActivity {
         playerNames[0]  = findViewById(R.id.playerOneName);
         playerNames[1] = findViewById(R.id.playerTwoName);
         counter = findViewById(R.id.timeCounter);
-        leaveBtn = findViewById(R.id.buttonLeave);
+        leaveBtn = findViewById(R.id.btSalir);
 
         boardImgs[0] = findViewById(R.id.image1);
         boardImgs[1] = findViewById(R.id.image2);
