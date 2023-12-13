@@ -211,7 +211,7 @@ public class RPSGameActivity extends AppCompatActivity {
                     }
 
                     System.out.println(info.optString(Constants.Keys.WINNER));
-                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
+//                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
                 });
 
             } catch (JSONException e) {
@@ -226,10 +226,16 @@ public class RPSGameActivity extends AppCompatActivity {
 
                 // Verificar si la propiedad "username" está presente en el objeto
                 if (winnerInfo.has(Constants.Keys.WINNER)) {
-                    String winnerName = winnerInfo.getString(Constants.Keys.WINNER);
-
+                    String winnerId = winnerInfo.getString(Constants.Keys.WINNER);
+                    String winnerName = null;
+                    for (Player player : players) {
+                        if (player.id.equals(winnerId)) {
+                            winnerName = player.username;
+                        }
+                    }
+                    String finalWinnerName = winnerName;
                     runOnUiThread(() -> {
-                        showWinner(winnerName);
+                        showWinner(finalWinnerName);
                     });
                 } else {
                     // Manejar el caso en el que "username" no está presente
@@ -298,7 +304,11 @@ public class RPSGameActivity extends AppCompatActivity {
 
         // Configurar el TextView con el nombre del ganador
         TextView winnerTextView = dialogView.findViewById(R.id.textViewWinner);
-        winnerTextView.setText("¡Ganador!\n" + winnerName);
+        if (winnerName != null) {
+            winnerTextView.setText(getString(R.string.winner_dialog, winnerName));
+        } else {
+            winnerTextView.setText(R.string.draw_dialog);
+        }
 
         // Configurar el botón de Aceptar
         Button dismissButton = dialogView.findViewById(R.id.buttonDismiss);

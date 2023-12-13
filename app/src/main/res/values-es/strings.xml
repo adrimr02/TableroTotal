@@ -46,4 +46,6 @@
     <string name="Ranking">Ranking</string>
     <string name="Pares">Pares</string>
     <string name="Nones">Impares</string>
+    <string name="winner_dialog">¡El ganador es %s!</string>
+    <string name="draw_dialog">¡Empate!</string>
 </resources>
