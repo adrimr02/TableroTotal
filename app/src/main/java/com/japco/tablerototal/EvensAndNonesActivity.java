@@ -23,8 +23,6 @@ public class EvensAndNonesActivity extends AppCompatActivity {
 
     //TODO gestionar empates
 
-    //TODO personalizar rondas
-
     SocketService socketService;
     Button btPares;
     Button btNones;
