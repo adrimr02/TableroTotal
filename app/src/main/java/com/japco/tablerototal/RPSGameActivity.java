@@ -86,7 +86,8 @@ public class RPSGameActivity extends AppCompatActivity {
         Button leaveGameButton = findViewById(R.id.buttonLeave);
         leaveGameButton.setOnClickListener(v -> {
             // Lógica para navegar hacia atrás
-            onBackPressed();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
     }
 
@@ -304,6 +305,8 @@ public class RPSGameActivity extends AppCompatActivity {
         dismissButton.setOnClickListener(v -> {
             // Cerrar el diálogo cuando se hace clic en Aceptar
             dialog.dismiss();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
         // Crear el diálogo
