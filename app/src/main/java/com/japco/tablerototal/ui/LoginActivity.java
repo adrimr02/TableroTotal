@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.util.Dialogs;
 

@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.ui.main;
 
 import android.os.Bundle;
 
@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.japco.tablerototal.R;
+import com.japco.tablerototal.adapters.MatchListAdapter;
 import com.japco.tablerototal.model.Match;
 
 import java.util.ArrayList;

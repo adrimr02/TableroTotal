@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.Friend;
 
 import java.util.List;

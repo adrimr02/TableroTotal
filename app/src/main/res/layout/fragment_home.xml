@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/custom_background"
     android:importantForAutofill="no"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <TextView
         android:id="@+id/homeTextTitle"

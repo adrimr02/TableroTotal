@@ -18,32 +18,32 @@
         tools:targetApi="31"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".WaitingRoomActivity"
+            android:name=".ui.games.WaitingRoomActivity"
             android:exported="false" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="false" />
 
         <service android:name=".util.SocketService" />
 
         <activity
-            android:name=".RPSGameActivity"
+            android:name=".ui.games.RPSGameActivity"
             android:exported="false" />
         <activity
-            android:name=".EvensAndNonesActivity"
+            android:name=".ui.games.EvensAndNonesActivity"
             android:exported="false" />
         <activity
-            android:name=".TicTacToeActivity"
+            android:name=".ui.games.TicTacToeActivity"
             android:exported="false" />
         <activity
-            android:name=".NewGameActivity"
+            android:name=".ui.games.NewGameActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinGameActivity"
+            android:name=".ui.games.JoinGameActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

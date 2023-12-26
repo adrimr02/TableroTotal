@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.ui.games;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.ui.MainActivity;
+import com.japco.tablerototal.R;
+import com.japco.tablerototal.adapters.UsersListAdapter;
 import com.japco.tablerototal.model.User;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
@@ -24,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class WaitingRoomActivity extends AppCompatActivity {

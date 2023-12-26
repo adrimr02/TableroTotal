@@ -1,6 +1,4 @@
-package com.japco.tablerototal;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.japco.tablerototal.ui.games;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,10 +7,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
-public class RPSGameActivity extends AppCompatActivity {
+public class EvensAndNonesActivity extends AppCompatActivity {
 
     SocketService socketService;
 
@@ -35,7 +36,7 @@ public class RPSGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rpsgame);
+        setContentView(R.layout.activity_paresynones);
     }
 
     @Override

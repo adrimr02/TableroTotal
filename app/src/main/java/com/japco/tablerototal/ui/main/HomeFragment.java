@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,14 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
+import com.japco.tablerototal.R;
+import com.japco.tablerototal.ui.LoginActivity;
+import com.japco.tablerototal.ui.games.JoinGameActivity;
+import com.japco.tablerototal.ui.games.NewGameActivity;
 import com.japco.tablerototal.util.Connection;
 import com.japco.tablerototal.util.Dialogs;
-
-import java.util.Objects;
 
 public class HomeFragment extends Fragment {
 
