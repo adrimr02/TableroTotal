@@ -14,23 +14,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.LoginActivity;
 import com.japco.tablerototal.ui.games.JoinGameActivity;
 import com.japco.tablerototal.ui.games.NewGameActivity;
 import com.japco.tablerototal.util.Connection;
 import com.japco.tablerototal.util.Dialogs;
 
+import java.util.Objects;
+
 public class HomeFragment extends Fragment {
 
     private EditText editUsername;
-    private Button createGameButton;
-    private Button joinGameButton;
-    private Button btnLogout;
 
     private FirebaseAuth auth;
 
@@ -45,10 +48,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         editUsername = view.findViewById(R.id.homeNameField);
-        createGameButton = view.findViewById(R.id.buttonCreateGame);
-        joinGameButton = view.findViewById(R.id.buttonJoinGame);
+        Button createGameButton = view.findViewById(R.id.buttonCreateGame);
+        Button joinGameButton = view.findViewById(R.id.buttonJoinGame);
 
-        btnLogout = view.findViewById(R.id.btnLogout);
+        Button btnLogout = view.findViewById(R.id.btnLogout);
 
         btnLogout.setOnClickListener(v -> {
             logout();
@@ -75,17 +78,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null) {
-            String username = auth.getCurrentUser().getDisplayName();
-            if (username != null) {
-                editUsername.setText(username);
-            }
-        } else {
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            startActivity(intent);
-        }
+        AuthUser user = ((MyApplication) getActivity().getApplication()).getUser();
+        editUsername.setText(user.getUsername());
     }
 
     private boolean isValid() {
@@ -94,8 +88,6 @@ public class HomeFragment extends Fragment {
             Dialogs.showInfoDialog(getActivity(), R.string.no_connection_dialog_message);
             return false;
         }
-
-        ((MyApplication) requireActivity().getApplication()).setUsername(editUsername.getText().toString().trim());
         return true;
     }
 
@@ -103,6 +95,10 @@ public class HomeFragment extends Fragment {
         Dialogs.showConfirmDialog(getContext(), R.string.logout_text, (d,i) -> {
             d.dismiss();
             auth.signOut();
+            GoogleSignIn.getClient(
+                    requireActivity(),
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+            ).signOut();
             Intent intent = new Intent(getContext(), LoginActivity.class);
             startActivity(intent);
         });

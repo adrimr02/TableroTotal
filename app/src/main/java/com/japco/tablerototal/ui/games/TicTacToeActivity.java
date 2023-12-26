@@ -263,7 +263,7 @@ public class TicTacToeActivity extends AppCompatActivity {
                     return;
 
                 String winnerUsername = winnerP.get().getUsername();
-                if (winnerUsername.equals(((MyApplication) getApplication()).getUsername())) {
+                if (winnerUsername.equals(((MyApplication) getApplication()).getUser().getUsername())) {
                     message = "¡Ganaste!\n";
                 } else {
                     message = "¡Perdiste!\n";

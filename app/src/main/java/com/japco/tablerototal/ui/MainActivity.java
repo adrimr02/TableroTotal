@@ -12,6 +12,9 @@ import android.util.Log;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.japco.tablerototal.model.AuthUser;
+import com.japco.tablerototal.repositories.FirestoreRepository;
 import com.japco.tablerototal.ui.main.FriendsFragment;
 import com.japco.tablerototal.ui.main.HomeFragment;
 import com.japco.tablerototal.MyApplication;
@@ -26,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
     RecordFragment recordFragment = new RecordFragment();
     FriendsFragment friendsFragment = new FriendsFragment();
 
+    final FirestoreRepository repository = new FirestoreRepository();
+
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        System.out.println("Main activity");
 
         auth = FirebaseAuth.getInstance();
 
@@ -52,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-        bottomNavigationView.setSelectedItemId(R.id.homeNavButton);
-        Log.i("Navigation", String.valueOf(R.id.homeNavButton));
     }
 
     @Override
@@ -63,12 +64,23 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         System.out.println(user);
         if (user == null) {
-            System.out.println("Moving to login activity");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {
-            ((MyApplication) getApplication()).setUsername(user.getDisplayName());
-            System.out.println(user.getDisplayName());
+            repository.getUser(user.getUid(), new FirestoreRepository.OnFirestoreTaskComplete<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot result) {
+                    AuthUser user = result.toObject(AuthUser.class);
+                    ((MyApplication) getApplication()).setUser(user);
+                    System.out.println("user loaded");
+                    bottomNavigationView.setSelectedItemId(R.id.homeNavButton);
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 

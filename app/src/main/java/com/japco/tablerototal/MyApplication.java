@@ -2,15 +2,17 @@ package com.japco.tablerototal;
 
 import android.app.Application;
 
+import com.japco.tablerototal.model.AuthUser;
+
 public class MyApplication extends Application {
-    private String username;
+    private AuthUser user;
 
 
-    public String getUsername() {
-        return username;
+    public AuthUser getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(AuthUser user) {
+        this.user = user;
     }
 }
