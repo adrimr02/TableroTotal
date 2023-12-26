@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.ui.games;
 
 import android.app.Dialog;
 import android.content.ComponentName;
@@ -15,8 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.japco.tablerototal.R;
 
+import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.model.User;
+import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.SocketService;
 
 import org.json.JSONArray;
