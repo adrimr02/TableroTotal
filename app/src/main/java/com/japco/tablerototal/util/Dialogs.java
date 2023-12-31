@@ -28,9 +28,7 @@ public class Dialogs {
     public static void showInfoDialog(Context context, String text) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         AlertDialog dialog = builder.setMessage(text)
-                .setPositiveButton(R.string.accept_btn, (DialogInterface d, int id) -> {
-                    d.dismiss();
-                })
+                .setPositiveButton(R.string.accept_btn, (DialogInterface d, int id) -> d.dismiss())
                 .create();
         dialog.show();
     }
@@ -38,9 +36,7 @@ public class Dialogs {
     public static void showInfoDialog(Context context, int text) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         AlertDialog dialog = builder.setMessage(text)
-                .setPositiveButton(R.string.accept_btn, (DialogInterface d, int id) -> {
-                    d.dismiss();
-                })
+                .setPositiveButton(R.string.accept_btn, (DialogInterface d, int id) -> d.dismiss())
                 .create();
         dialog.show();
     }
@@ -49,9 +45,7 @@ public class Dialogs {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         AlertDialog dialog = builder.setMessage(text)
                 .setPositiveButton(R.string.confirm_btn, okListener)
-                .setNegativeButton(R.string.cancel_btn, (dialogInterface, i) -> {
-                   dialogInterface.dismiss();
-                })
+                .setNegativeButton(R.string.cancel_btn, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
         dialog.show();
     }
@@ -60,9 +54,7 @@ public class Dialogs {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         AlertDialog dialog = builder.setMessage(text)
                 .setPositiveButton(R.string.confirm_btn, okListener)
-                .setNegativeButton(R.string.cancel_btn, (dialogInterface, i) -> {
-                    dialogInterface.dismiss();
-                })
+                .setNegativeButton(R.string.cancel_btn, (dialogInterface, i) -> dialogInterface.dismiss())
                 .create();
         dialog.show();
     }

@@ -20,7 +20,7 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
     public interface OnItemClickListener {
         void onItemClick(Match item);
     }
-    private List<Match> matchsList;
+    private final List<Match> matchsList;
     private final OnItemClickListener listener;
 
     public MatchListAdapter(List<Match> matchsList, OnItemClickListener listener) {
@@ -50,16 +50,16 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
     }
 
     public static class GameMatchViewHolder extends RecyclerView.ViewHolder{
-        private TextView title;
-        private TextView date;
-        private TextView winner;
-        private ImageView gameLogo;
+        private final TextView title;
+        private final TextView date;
+        private final TextView winner;
+        private final ImageView gameLogo;
         public GameMatchViewHolder(View itemView) {
             super(itemView);
-            title= (TextView)itemView.findViewById(R.id.gametitle);
-            date= (TextView)itemView.findViewById(R.id.date);
-            winner= (TextView)itemView.findViewById(R.id.winner);
-            gameLogo = (ImageView)itemView.findViewById(R.id.gameLogo);
+            title= itemView.findViewById(R.id.gametitle);
+            date= itemView.findViewById(R.id.date);
+            winner= itemView.findViewById(R.id.winner);
+            gameLogo = itemView.findViewById(R.id.gameLogo);
         }
 
         public void bindUser(final Match match, final OnItemClickListener listener) {
@@ -67,11 +67,9 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
             date.setText(match.getDate());
             winner.setText("Ganador: " + match.getWinner());
             gameLogo.setImageResource(match.getImgDirectory());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    Log.i("Hola", "Hola");
-                    listener.onItemClick(match);
-                }
+            itemView.setOnClickListener(v -> {
+                Log.i("Hola", "Hola");
+                listener.onItemClick(match);
             });
         }
     }

@@ -1,7 +1,5 @@
 package com.japco.tablerototal.ui.games;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,8 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
@@ -26,7 +27,6 @@ import java.util.Arrays;
 
 public class JoinGameActivity extends AppCompatActivity {
 
-    private Button joinButton;
     private EditText codeField;
 
     private String username;
@@ -54,7 +54,7 @@ public class JoinGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
 
-        joinButton = findViewById(R.id.buttonJoin);
+        Button joinButton = findViewById(R.id.buttonJoin);
         codeField = findViewById(R.id.gameCodeField);
         TextView textUsername = findViewById(R.id.textUsername);
 
@@ -86,6 +86,14 @@ public class JoinGameActivity extends AppCompatActivity {
     }
 
     private void connect(String roomCode, String username) {
+        if (!socketService.getSocket().connected()) {
+            Dialogs.showInfoDialog(this, "No se ha podido conectar al servidor. Intentalo de nuevo.", (d, i) -> {
+                d.dismiss();
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            });
+            return;
+        }
         socketService.getSocket().emit(Constants.ClientEvents.JOIN_GAME, new String[] { username, roomCode} , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError;
@@ -104,9 +112,7 @@ public class JoinGameActivity extends AppCompatActivity {
 
             if (isError) {
                 runOnUiThread(() -> Dialogs.showInfoDialog(JoinGameActivity.this,
-                        R.string.join_error_message, (DialogInterface dialog, int id) -> {
-                    dialog.dismiss();
-                }));
+                        R.string.join_error_message, (DialogInterface dialog, int id) -> dialog.dismiss()));
             } else {
                 enterGameView(game, roomCode);
             }

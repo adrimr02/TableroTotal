@@ -1,24 +1,18 @@
 package com.japco.tablerototal.ui.games;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.japco.tablerototal.Constants;
-import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
-import com.japco.tablerototal.util.SocketService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,42 +21,20 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class TicTacToeActivity extends AppCompatActivity {
+public class TicTacToeActivity extends AbstractGameActivity {
 
-    SocketService socketService;
-    TextView[] playerNames = new TextView[2];
+    final TextView[] playerNames = new TextView[2];
     TextView counter;
     Button leaveBtn;
 
-    Player[] players = new Player[2];
-    ImageView[] boardImgs = new ImageView[9];
-    int[] board = new int[9];
+    final Player[] players = new Player[2];
+    final ImageView[] boardImgs = new ImageView[9];
+    final int[] board = new int[9];
     boolean hasTurn = false;
-    String userId = null;
-
-    private final ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance.
-            SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
-            socketService = binder.getService();
-            userId = socketService.getSocket().id();
-            System.out.println("Bind");
-            addSocketListeners();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            socketService = null;
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("Create");
         setContentView(R.layout.activity_tresenraya);
 
         findElements();
@@ -99,10 +71,9 @@ public class TicTacToeActivity extends AppCompatActivity {
             } else {
                 boardImgs[i].setBackground(AppCompatResources.getDrawable(this, R.drawable.white_box));
                 if (board[i] == 0) {
-                    int finalI = i;
                     JSONObject param = new JSONObject();
                     try {
-                        param.put(Constants.Keys.CELL,finalI);
+                        param.put(Constants.Keys.CELL, i);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -129,32 +100,7 @@ public class TicTacToeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        System.out.println("Start");
-        // Bind to socket service
-        Intent intent = new Intent(this, SocketService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
-        socketService.getSocket().off(Constants.ServerEvents.NEXT_TURN);
-        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
-
-        // Se elimina el show_time de la sala de espera
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
-
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
-        unbindService(connection);
-    }
-
-    private void addSocketListeners() {
-        System.out.println("Initializing TTT game listeners");
+    protected void addSocketListeners() {
         socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
             System.out.println(args[0]);
             try {
@@ -164,13 +110,13 @@ public class TicTacToeActivity extends AppCompatActivity {
                     players[i] = new Player(
                             player.getString(Constants.Keys.ID),
                             player.getString(Constants.Keys.USERNAME),
-                            player.getString(Constants.Keys.SYMBOL),
                             i + 1);
+                    players[i].setSymbol(player.getString(Constants.Keys.SYMBOL));
                 }
                 runOnUiThread(() -> {
                     if (playersArray.length() >= 2) {
-                        playerNames[0].setText(players[0].username);
-                        playerNames[1].setText(players[1].username);
+                        playerNames[0].setText(players[0].getUsername());
+                        playerNames[1].setText(players[1].getUsername());
                     }
                     paintBoard();
                 });
@@ -183,7 +129,6 @@ public class TicTacToeActivity extends AppCompatActivity {
             System.out.println(args[0]);
             try {
                 String nextPlayer = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS).getJSONObject(0).getString(Constants.Keys.ID);
-                System.out.println("Siguiente turno: " + nextPlayer);
                 for (Player p : players) {
                     if (p.getId().equals(nextPlayer)) {
                         runOnUiThread(() -> {
@@ -193,9 +138,7 @@ public class TicTacToeActivity extends AppCompatActivity {
                 }
                 if (userId.equals(nextPlayer)) {
                     this.hasTurn = true;
-                    runOnUiThread(() -> Dialogs.showInfoDialog(this, "Tienes el turno", (dialog, ignore) -> {
-                        dialog.dismiss();
-                    }));
+                    runOnUiThread(() -> Dialogs.showInfoDialog(this, R.string.got_turn_message, (dialog, ignore) -> dialog.dismiss()));
                 } else {
                     this.hasTurn = false;
                 }
@@ -206,7 +149,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         });
 
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
-            System.out.println(args[0]);
             try {
                 JSONArray board = ((JSONObject) args[0]).getJSONArray(Constants.Keys.BOARD);
                 for (int i = 0; i < board.length(); i++) {
@@ -229,7 +171,6 @@ public class TicTacToeActivity extends AppCompatActivity {
         });
 
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
-            System.out.println(args[0]);
             try {
                 int timeLeft = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
                 runOnUiThread(() -> counter.setText(String.valueOf(timeLeft)));
@@ -243,9 +184,15 @@ public class TicTacToeActivity extends AppCompatActivity {
             JSONObject results = ((JSONObject) args[0]);
             runOnUiThread(() -> showFinishGame(results));
         });
+    }
 
-        // Notify server when client is ready
-        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
+    @Override
+    void removeSocketListeners() {
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
+        socketService.getSocket().off(Constants.ServerEvents.NEXT_TURN);
+        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
     }
 
     private void showFinishGame(JSONObject results) {
@@ -253,7 +200,7 @@ public class TicTacToeActivity extends AppCompatActivity {
             String type = results.getString(Constants.Keys.TYPE);
             String message;
             if (type.equals(Constants.ResultTypes.DRAW)) {
-                message = "¡Empate!";
+                message = getString(R.string.draw_message);
             } else {
                 String winner = results.getString(Constants.Keys.WINNER);
                 Optional<Player> winnerP = Arrays.stream(players).filter(p -> p.getId().equals(winner))
@@ -263,15 +210,17 @@ public class TicTacToeActivity extends AppCompatActivity {
                     return;
 
                 String winnerUsername = winnerP.get().getUsername();
+                boolean win = false;
                 if (winnerUsername.equals(((MyApplication) getApplication()).getUser().getUsername())) {
-                    message = "¡Ganaste!\n";
+                    message = getString(R.string.win_message);
+                    win = true;
                 } else {
-                    message = "¡Perdiste!\n";
+                    message = getString(R.string.lose_message);
                 }
                 if (type.equals(Constants.ResultTypes.TIMEOUT)) {
-                    message += "Por tiempo";
+                    message += win ? getString(R.string.win_by_time_message) : getString(R.string.lose_by_time_message);
                 } else if (type.equals(Constants.ResultTypes.RESIGNATION)) {
-                    message += "Por abandono";
+                    message += win ? getString(R.string.win_by_resignation_message) : getString(R.string.lose_by_resignation_message);
                 }
             }
 
@@ -281,36 +230,6 @@ public class TicTacToeActivity extends AppCompatActivity {
             });
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private class Player {
-        private final String id;
-        private final String username;
-        private final String symbol;
-        private final int number;
-
-        public Player (String id, String username, String symbol, int number) {
-            this.id = id;
-            this.username = username;
-            this.symbol = symbol;
-            this.number = number;
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        public String getUsername() {
-            return this.username;
-        }
-
-        public String getSymbol() {
-            return this.symbol;
-        }
-
-        public int getNumber() {
-            return this.number;
         }
     }
 }

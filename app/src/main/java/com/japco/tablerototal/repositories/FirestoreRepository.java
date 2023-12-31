@@ -1,14 +1,8 @@
 package com.japco.tablerototal.repositories;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.japco.tablerototal.model.AuthUser;
-
-import java.util.List;
 
 public class FirestoreRepository {
 
@@ -25,7 +19,13 @@ public class FirestoreRepository {
     }
 
     public void setUser(AuthUser user, OnFirestoreTaskComplete<Void> onComplete) {
-        db.collection("users").document(user.getUserId()).set(user);
+        db.collection("users").document(user.getUserId()).set(user).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                onComplete.onSuccess(null);
+            } else {
+                onComplete.onError(task.getException());
+            }
+        });
     }
 
     public interface OnFirestoreTaskComplete<TModel> {

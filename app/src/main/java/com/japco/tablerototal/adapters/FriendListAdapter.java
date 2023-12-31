@@ -19,7 +19,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     public interface OnItemClickListener {
         void onItemClick(Friend item);
     }
-    private List<Friend> friendsList;
+    private final List<Friend> friendsList;
     private final FriendListAdapter.OnItemClickListener listener;
 
     public FriendListAdapter(List<Friend> friendsList, FriendListAdapter.OnItemClickListener listener) {
@@ -49,25 +49,23 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Fr
     }
 
     public static class FriendViewHolder extends RecyclerView.ViewHolder{
-        private TextView friendName;
-        private TextView lastConnection;
-        private ImageView friendPicture;
+        private final TextView friendName;
+        private final TextView lastConnection;
+        private final ImageView friendPicture;
         public FriendViewHolder(View itemView) {
             super(itemView);
-            friendName= (TextView)itemView.findViewById(R.id.friendName);
-            lastConnection= (TextView)itemView.findViewById(R.id.lastConnection);
-            friendPicture = (ImageView)itemView.findViewById(R.id.friendPicture);
+            friendName= itemView.findViewById(R.id.friendName);
+            lastConnection= itemView.findViewById(R.id.lastConnection);
+            friendPicture = itemView.findViewById(R.id.friendPicture);
         }
 
         public void bindUser(final Friend friend, final FriendListAdapter.OnItemClickListener listener) {
             friendName.setText(friend.getName());
             lastConnection.setText("Última Conexión: " + friend.getLastConnection());
             friendPicture.setImageResource(R.drawable.contacto);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    Log.i("Hola", "Hola");
-                    listener.onItemClick(friend);
-                }
+            itemView.setOnClickListener(v -> {
+                Log.i("Hola", "Hola");
+                listener.onItemClick(friend);
             });
         }
     }

@@ -50,25 +50,21 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder{
-        private TextView nickname;
-        private TextView state;
-        private ImageView userPicture;
+        private final TextView nickname;
+        private final TextView state;
+        private final ImageView userPicture;
         public UserViewHolder(View itemView) {
             super(itemView);
-            nickname= (TextView)itemView.findViewById(R.id.nickname);
-            state= (TextView)itemView.findViewById(R.id.state);
-            userPicture = (ImageView)itemView.findViewById(R.id.userPicture);
+            nickname= itemView.findViewById(R.id.nickname);
+            state= itemView.findViewById(R.id.state);
+            userPicture = itemView.findViewById(R.id.userPicture);
         }
 
         public void bindUser(final User user, final UsersListAdapter.OnItemClickListener listener) {
             nickname.setText(user.getNickname());
             state.setText(user.getState());
             userPicture.setImageResource(R.drawable.contacto);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(user);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onItemClick(user));
         }
     }
 

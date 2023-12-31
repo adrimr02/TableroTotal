@@ -43,7 +43,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         6- Avisar cuando no haya suficientes jugadores
      */
 
-    List<User> connectedUsers = new ArrayList<>();
+    final List<User> connectedUsers = new ArrayList<>();
     UsersListAdapter usersAdapter;
     String roomCode;
     String game;
@@ -86,7 +86,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         this.username = getIntent().getStringExtra("username");
 
         volver = findViewById(R.id.btAtras);
-        connectedUsersView = (RecyclerView)findViewById(R.id.rcylConnectedUsers);
+        connectedUsersView = findViewById(R.id.rcylConnectedUsers);
         cronometro = findViewById(R.id.txContador);
         listo = findViewById(R.id.btListo);
         codigo = findViewById(R.id.txCodigo);
@@ -97,26 +97,14 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         connectedUsersView.setLayoutManager(layoutManager);
-        usersAdapter= new UsersListAdapter(connectedUsers,
-                new UsersListAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(User item) {
-                        clickOnItem(item);
-                    }
-                });
+        usersAdapter= new UsersListAdapter(connectedUsers, this::clickOnItem);
         connectedUsersView.setAdapter(usersAdapter);
 
-        listo.setOnClickListener(v -> {
-            updateReadyState();
-        });
+        listo.setOnClickListener(v -> updateReadyState());
 
-        compartir.setOnClickListener(v -> {
-            compartirCodigo();
-        });
+        compartir.setOnClickListener(v -> compartirCodigo());
 
-        volver.setOnClickListener(v -> {
-            moveToMainActivity();
-        });
+        volver.setOnClickListener(v -> moveToMainActivity());
 
     }
 
@@ -171,9 +159,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
                 int counter = ((JSONObject) args[0]).getInt("counter");
-                runOnUiThread(() -> {
-                    cronometro.setText(counter + "s");
-                });
+                runOnUiThread(() -> cronometro.setText(counter + "s"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -201,9 +187,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                             state, null));
                 }
 
-                runOnUiThread(() -> {
-                    usersAdapter.setUsersList(connectedUsers);
-                });
+                runOnUiThread(() -> usersAdapter.setUsersList(connectedUsers));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -211,22 +195,16 @@ public class WaitingRoomActivity extends AppCompatActivity {
         });
 
         //Pasa a la partida si comienza el juego
-        socketService.getSocket().on(Constants.ServerEvents.START_GAME, args -> {
-            enterGameView();
-        });
+        socketService.getSocket().on(Constants.ServerEvents.START_GAME, args -> enterGameView());
 
         //Cancela si no se cumplen las condiciones para iniciar partida
         socketService.getSocket().on("error", args -> {
             try {
                 String errorMsg = ((JSONObject) args[0]).getString("code");
                 if(errorMsg.equals(Constants.NOT_ENOUGHT_PLAYERS)){
-                    runOnUiThread(() -> {
-                        Dialogs.showInfoDialog(WaitingRoomActivity.this,
-                                getString(R.string.not_enough_players),
-                                (DialogInterface dialog, int id) -> {
-                            moveToMainActivity();
-                        });
-                    });
+                    runOnUiThread(() -> Dialogs.showInfoDialog(WaitingRoomActivity.this,
+                            getString(R.string.not_enough_players),
+                            (DialogInterface dialog, int id) -> moveToMainActivity()));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
