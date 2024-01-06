@@ -15,7 +15,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
@@ -29,9 +31,9 @@ public class JoinGameActivity extends AppCompatActivity {
 
     private EditText codeField;
 
-    private String username;
-
     SocketService socketService;
+
+    AuthUser authUser;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -54,19 +56,20 @@ public class JoinGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_game);
 
+        authUser = ((MyApplication) getApplication()).getUser();
+
         Button joinButton = findViewById(R.id.buttonJoin);
         codeField = findViewById(R.id.gameCodeField);
         TextView textUsername = findViewById(R.id.textUsername);
 
-        username = getIntent().getStringExtra(Constants.USERNAME_EXTRA);
-        textUsername.setText(username);
+        textUsername.setText(authUser.getUsername());
 
         joinButton.setOnClickListener(v -> {
             if (codeField.getText().toString().trim().length() != 6) {
                 Dialogs.showInfoDialog(JoinGameActivity.this, R.string.no_code_dialog_message, (DialogInterface dialog, int id) -> dialog.dismiss());
                 return;
             }
-            connect(codeField.getText().toString().trim(), username);
+            connect(codeField.getText().toString().trim(), authUser.getUsername());
         });
 
     }
@@ -94,7 +97,14 @@ public class JoinGameActivity extends AppCompatActivity {
             });
             return;
         }
-        socketService.getSocket().emit(Constants.ClientEvents.JOIN_GAME, new String[] { username, roomCode} , args -> {
+        JSONObject user = new JSONObject();
+        try {
+            user.put("userId", authUser.getUserId());
+            user.put("username", authUser.getUsername());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        socketService.getSocket().emit(Constants.ClientEvents.JOIN_GAME, new Object[] { user, roomCode} , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError;
             String game = null;
@@ -125,7 +135,6 @@ public class JoinGameActivity extends AppCompatActivity {
         Intent intent = new Intent(JoinGameActivity.this, WaitingRoomActivity.class);
         intent.putExtra("roomCode", roomCode);
         intent.putExtra("game", game);
-        intent.putExtra("username", username);
 
         startActivity(intent);
     }

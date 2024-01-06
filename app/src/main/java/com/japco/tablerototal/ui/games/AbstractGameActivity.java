@@ -4,18 +4,23 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.util.SocketService;
 
 public abstract class AbstractGameActivity extends AppCompatActivity {
 
     protected SocketService socketService;
 
-    protected String userId = null;
+    AuthUser authUser;
+
+    protected String socketId;
 
     private final ServiceConnection connection = new ServiceConnection() {
 
@@ -25,7 +30,7 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance.
             SocketService.SocketBinder binder = (SocketService.SocketBinder) service;
             socketService = binder.getService();
-            userId = socketService.getSocket().id();
+            socketId = socketService.getSocket().id();
             addSocketListeners();
             // Notify server when client is ready
             socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
@@ -36,6 +41,13 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
             socketService = null;
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        authUser = ((MyApplication) getApplication()).getUser();
+    }
 
     @Override
     protected void onStart() {

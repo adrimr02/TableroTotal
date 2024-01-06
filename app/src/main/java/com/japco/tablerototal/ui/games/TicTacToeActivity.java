@@ -136,7 +136,7 @@ public class TicTacToeActivity extends AbstractGameActivity {
                         });
                     }
                 }
-                if (userId.equals(nextPlayer)) {
+                if (socketId.equals(nextPlayer)) {
                     this.hasTurn = true;
                     runOnUiThread(() -> Dialogs.showInfoDialog(this, R.string.got_turn_message, (dialog, ignore) -> dialog.dismiss()));
                 } else {

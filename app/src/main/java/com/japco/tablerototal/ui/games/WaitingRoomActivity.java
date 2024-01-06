@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
 import com.japco.tablerototal.adapters.UsersListAdapter;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.model.User;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
@@ -55,7 +57,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     TextView cronometro;
     TextView codigo;
     boolean mBound;
-    String username;
+    AuthUser authUser;
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -83,7 +85,8 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         this.roomCode = getIntent().getStringExtra("roomCode");
         this.game = getIntent().getStringExtra("game");
-        this.username = getIntent().getStringExtra("username");
+
+        authUser = ((MyApplication) getApplication()).getUser();
 
         volver = findViewById(R.id.btAtras);
         connectedUsersView = findViewById(R.id.rcylConnectedUsers);
@@ -241,7 +244,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         } else {
             return;
         }
-        intent.putExtra("username", username);
+
         startActivity(intent);
     }
 }

@@ -17,7 +17,9 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
@@ -36,7 +38,8 @@ public class NewGameActivity extends AppCompatActivity {
 
     SocketService socketService;
 
-    private String username;
+    AuthUser authUser;
+
     private String selectedGame = Constants.GAMES[1];
     private int selectedRounds = 3;
 
@@ -60,7 +63,8 @@ public class NewGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game);
-        username = getIntent().getStringExtra(Constants.USERNAME_EXTRA);
+
+        authUser = ((MyApplication) getApplication()).getUser();
 
         ticTacToeButton = findViewById(R.id.ticTacToeButton);
         rpsButton = findViewById(R.id.RPSButton);
@@ -162,7 +166,16 @@ public class NewGameActivity extends AppCompatActivity {
             });
             return;
         }
-        socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new Object[] { username, gameOptions } , args -> {
+
+        JSONObject user = new JSONObject();
+        try {
+            user.put("userId", authUser.getUserId());
+            user.put("username", authUser.getUsername());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        socketService.getSocket().emit(Constants.ClientEvents.CREATE_GAME, new Object[] { user, gameOptions } , args -> {
             JSONObject response = (JSONObject) args[0];
             boolean isError;
             String game = null;
@@ -198,7 +211,6 @@ public class NewGameActivity extends AppCompatActivity {
         Intent intent = new Intent(NewGameActivity.this, WaitingRoomActivity.class);
         intent.putExtra("roomCode", roomCode);
         intent.putExtra("game", game);
-        intent.putExtra("username", username);
 
         startActivity(intent);
     }

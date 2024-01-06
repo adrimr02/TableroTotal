@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 
@@ -27,14 +28,11 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
     TextView txRonda;
     TextView[] ranking;
     TextView txRanking;
-    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paresynones);
-
-        username = ((MyApplication) getApplication()).getUser().getUsername();
 
         btNones = findViewById(R.id.botonNones);
         btPares =  findViewById(R.id.botonPares);
@@ -130,7 +128,7 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
                 for(int i = 0; i < chart.length(); i++){
                     JSONObject obj = chart.getJSONObject(i);
                     String id = obj.getString(Constants.Keys.PLAYER_ID);
-                    if(id.equals(userId)){
+                    if(id.equals(socketId)){
                         points = obj.getInt(Constants.Keys.POINTS);
                         break;
                     }
