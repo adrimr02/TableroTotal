@@ -71,116 +71,106 @@ public class RPSGameActivity extends AbstractGameActivity {
         socketService.getSocket().emit(Constants.ClientEvents.MOVE, move);
     }
 
-    protected void addSocketListeners() {
-        // Tiempo restante
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
-            try {
-                int counter = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
-                runOnUiThread(() -> contador.setText(counter + "s"));
-            } catch (JSONException e) {
-                e.printStackTrace();
+    @Override
+    protected void onShowInitialInfo(Object[] args) {
+        try {
+            JSONArray playersArray = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS);
+            for (int i = 0; i < playersArray.length(); i++) {
+                JSONObject player = playersArray.getJSONObject(i);
+                players[i] = new Player(
+                        player.getString(Constants.Keys.ID),
+                        player.getString(Constants.Keys.USERNAME),
+                        i + 1);
             }
-        });
-
-        // Indicar la primera ronda al comienzo de la partida
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
-            try {
-                JSONArray playersArray = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS);
-                for (int i = 0; i < playersArray.length(); i++) {
-                    JSONObject player = playersArray.getJSONObject(i);
-                    players[i] = new Player(
-                            player.getString(Constants.Keys.ID),
-                            player.getString(Constants.Keys.USERNAME),
-                            i + 1);
+            runOnUiThread(() -> {
+                if (playersArray.length() >= 2) {
+                    playerNames[0].setText(players[0].getUsername());
+                    playerNames[1].setText(players[1].getUsername());
                 }
-                runOnUiThread(() -> {
-                    if (playersArray.length() >= 2) {
-                        playerNames[0].setText(players[0].getUsername());
-                        playerNames[1].setText(players[1].getUsername());
-                    }
-                    enableButtons();
+                enableButtons();
 
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // Resultado, ronda y pts
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
-            try {
-                JSONObject info = (JSONObject) args[0];
-                System.out.println(info);
-
-                int round = info.getInt(Constants.Keys.ROUND) + 1;
-
-                // Obtén los puntos de cada jugador del objeto 'points'
-                JSONObject pointsObject = info.getJSONObject(Constants.Keys.POINTS);
-                Map<String, Integer> playerPoints = new HashMap<>();
-                Iterator<String> keys = pointsObject.keys();
-                while (keys.hasNext()) {
-                    String playerId = keys.next();
-                    int points = pointsObject.isNull(playerId) ? 0 : pointsObject.getInt(playerId);
-                    playerPoints.put(playerId, points);
-                }
-
-                runOnUiThread(() -> {
-                    // Update round number
-                    numRondas.setText(String.valueOf(round));
-
-                    // Enable buttons after round results are shown
-                    paper.setEnabled(true);
-                    rock.setEnabled(true);
-                    scissors.setEnabled(true);
-
-                    // Iterate through the playerPoints map and update player scores
-                    for (Map.Entry<String, Integer> entry : playerPoints.entrySet()) {
-                        updatePlayerScore(entry.getKey(), entry.getValue());
-                    }
-
-                    System.out.println(info.optString(Constants.Keys.WINNER));
-//                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        // Ganador partida
-        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
-            try {
-                JSONObject winnerInfo = (JSONObject) args[0];
-
-                // Verificar si la propiedad "username" está presente en el objeto
-                if (winnerInfo.has(Constants.Keys.WINNER)) {
-                    String winnerId = winnerInfo.getString(Constants.Keys.WINNER);
-                    String winnerName = null;
-                    for (Player player : players) {
-                        if (player.getId().equals(winnerId)) {
-                            winnerName = player.getUsername();
-                        }
-                    }
-                    String finalWinnerName = winnerName;
-                    runOnUiThread(() -> showWinner(finalWinnerName));
-                } else {
-                    // Manejar el caso en el que "username" no está presente
-                    // Puedes imprimir un mensaje de error o realizar otra acción según tus necesidades
-                    System.err.println("El objeto winnerInfo no contiene la propiedad 'username'");
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    protected void removeSocketListeners() {
-        socketService.getSocket().off(Constants.ClientEvents.MOVE);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
-        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
-        socketService.getSocket().off(Constants.ClientEvents.CLIENT_READY);
+    @Override
+    protected void onTurnResults(Object[] args) {
+        try {
+            JSONObject info = (JSONObject) args[0];
+            System.out.println(info);
+
+            int round = info.getInt(Constants.Keys.ROUND) + 1;
+
+            // Obtén los puntos de cada jugador del objeto 'points'
+            JSONObject pointsObject = info.getJSONObject(Constants.Keys.POINTS);
+            Map<String, Integer> playerPoints = new HashMap<>();
+            Iterator<String> keys = pointsObject.keys();
+            while (keys.hasNext()) {
+                String playerId = keys.next();
+                int points = pointsObject.isNull(playerId) ? 0 : pointsObject.getInt(playerId);
+                playerPoints.put(playerId, points);
+            }
+
+            runOnUiThread(() -> {
+                // Update round number
+                numRondas.setText(String.valueOf(round));
+
+                // Enable buttons after round results are shown
+                paper.setEnabled(true);
+                rock.setEnabled(true);
+                scissors.setEnabled(true);
+
+                // Iterate through the playerPoints map and update player scores
+                for (Map.Entry<String, Integer> entry : playerPoints.entrySet()) {
+                    updatePlayerScore(entry.getKey(), entry.getValue());
+                }
+
+                System.out.println(info.optString(Constants.Keys.WINNER));
+//                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onShowTime(Object[] args) {
+        try {
+            int counter = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
+            runOnUiThread(() -> contador.setText(counter + "s"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onFinishGame(Object[] args) {
+        try {
+            JSONObject winnerInfo = (JSONObject) args[0];
+
+            // Verificar si la propiedad "username" está presente en el objeto
+            if (winnerInfo.has(Constants.Keys.WINNER)) {
+                String winnerId = winnerInfo.getString(Constants.Keys.WINNER);
+                String winnerName = null;
+                for (Player player : players) {
+                    if (player.getId().equals(winnerId)) {
+                        winnerName = player.getUsername();
+                    }
+                }
+                String finalWinnerName = winnerName;
+                runOnUiThread(() -> showWinner(finalWinnerName));
+            } else {
+                // Manejar el caso en el que "username" no está presente
+                // Puedes imprimir un mensaje de error o realizar otra acción según tus necesidades
+                System.err.println("El objeto winnerInfo no contiene la propiedad 'username'");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void enableButtons() {

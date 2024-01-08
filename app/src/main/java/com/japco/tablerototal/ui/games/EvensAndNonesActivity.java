@@ -7,9 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.japco.tablerototal.Constants;
-import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
-import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 
@@ -94,107 +92,98 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
         finish();
     }
 
-    protected void addSocketListeners(){
-        //Tiempo restante
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
-            try {
-                int counter = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
-                runOnUiThread(() -> txTiempo.setText(counter + "s"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        //Indicar la primera ronda al comienzo de la partida
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
-            try {
-                int round = ((JSONObject) args[0]).getInt(Constants.Keys.ROUND);
-                runOnUiThread(() -> txRonda.setText(String.valueOf(round)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        //Obtener siguiente ronda y puntos del jugador
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
-            int points = 0;
-
-            try {
-                JSONObject info = (JSONObject) args[0];
-
-                int round = info.getInt(Constants.Keys.ROUND);
-                JSONArray chart = info.getJSONArray(Constants.Keys.CHART);
-
-                for(int i = 0; i < chart.length(); i++){
-                    JSONObject obj = chart.getJSONObject(i);
-                    String id = obj.getString(Constants.Keys.PLAYER_ID);
-                    if(id.equals(socketId)){
-                        points = obj.getInt(Constants.Keys.POINTS);
-                        break;
-                    }
-                }
-
-                int finalPoints = points;
-
-                for(int i = 0; i < chart.length(); i++) {
-                    if (i == 3) {
-                        break;
-                    }
-
-                    JSONObject obj = chart.getJSONObject(i);
-                    String topUsername = obj.getString(Constants.Keys.USERNAME);
-                    int topPoints = obj.getInt(Constants.Keys.POINTS);
-
-                    String message = (i + 1) + ". " + topUsername + " (" + topPoints + "pts)";
-                    TextView tx = ranking[i];
-                    runOnUiThread(() -> {
-                        tx.setText(message);
-                        tx.setVisibility(View.VISIBLE);
-                    });
-                }
-
-                runOnUiThread(() -> {
-                    txPuntos.setText(finalPoints + "pts");
-                    txRonda.setText(String.valueOf(round));
-                    btNones.setEnabled(true);
-                    btPares.setEnabled(true);
-                    txNumero.setEnabled(true);
-                    txNumero.setText("");
-
-                    if(chart.length() > 0){
-                        txRanking.setVisibility(View.VISIBLE);
-                    }
-                });
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        //Ganador partida
-        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
-            try {
-                JSONObject obj = (JSONObject) args[0];
-                String winner = obj.getString(Constants.Keys.WINNER);
-                int winnerPoints = obj.getInt(Constants.Keys.POINTS);
-
-                String message = "¡" + winner + " ha ganado la partida con "
-                        + winnerPoints + " puntos!";
-
-                runOnUiThread(() -> Dialogs.showInfoDialog(this, message, (dialog, which) -> {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                }));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+    @Override
+    protected void onShowInitialInfo(Object[] args) {
+        try {
+            int round = ((JSONObject) args[0]).getInt(Constants.Keys.ROUND);
+            runOnUiThread(() -> txRonda.setText(String.valueOf(round)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
-    protected void removeSocketListeners() {
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
-        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+    @Override
+    protected void onTurnResults(Object[] args) {
+        int points = 0;
+
+        try {
+            JSONObject info = (JSONObject) args[0];
+
+            int round = info.getInt(Constants.Keys.ROUND);
+            JSONArray chart = info.getJSONArray(Constants.Keys.CHART);
+
+            for(int i = 0; i < chart.length(); i++){
+                JSONObject obj = chart.getJSONObject(i);
+                String id = obj.getString(Constants.Keys.PLAYER_ID);
+                if(id.equals(socketId)){
+                    points = obj.getInt(Constants.Keys.POINTS);
+                    break;
+                }
+            }
+
+            int finalPoints = points;
+
+            for(int i = 0; i < chart.length(); i++) {
+                if (i == 3) {
+                    break;
+                }
+
+                JSONObject obj = chart.getJSONObject(i);
+                String topUsername = obj.getString(Constants.Keys.USERNAME);
+                int topPoints = obj.getInt(Constants.Keys.POINTS);
+
+                String message = (i + 1) + ". " + topUsername + " (" + topPoints + "pts)";
+                TextView tx = ranking[i];
+                runOnUiThread(() -> {
+                    tx.setText(message);
+                    tx.setVisibility(View.VISIBLE);
+                });
+            }
+
+            runOnUiThread(() -> {
+                txPuntos.setText(finalPoints + "pts");
+                txRonda.setText(String.valueOf(round));
+                btNones.setEnabled(true);
+                btPares.setEnabled(true);
+                txNumero.setEnabled(true);
+                txNumero.setText("");
+
+                if(chart.length() > 0){
+                    txRanking.setVisibility(View.VISIBLE);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onShowTime(Object[] args) {
+        try {
+            int counter = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
+            runOnUiThread(() -> txTiempo.setText(counter + "s"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onFinishGame(Object[] args) {
+        try {
+            JSONObject obj = (JSONObject) args[0];
+            String winner = obj.getString(Constants.Keys.WINNER);
+            int winnerPoints = obj.getInt(Constants.Keys.POINTS);
+
+            String message = "¡" + winner + " ha ganado la partida con "
+                    + winnerPoints + " puntos!";
+
+            runOnUiThread(() -> Dialogs.showInfoDialog(this, message, (dialog, which) -> {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

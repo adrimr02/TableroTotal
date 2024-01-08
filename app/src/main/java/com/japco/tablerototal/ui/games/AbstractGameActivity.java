@@ -64,8 +64,35 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
         unbindService(connection);
     }
 
-    abstract void addSocketListeners();
-    abstract void removeSocketListeners();
+    protected void addSocketListeners() {
+        // Make sure waiting room show time listener is removed
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, this::onShowInitialInfo);
+        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, this::onNextTurn);
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, this::onTurnResults);
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, this::onShowTime);
+        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, this::onFinishGame);
+
+        socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
+    }
+    protected void removeSocketListeners() {
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
+        socketService.getSocket().off(Constants.ServerEvents.NEXT_TURN);
+        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
+        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
+    }
+
+    protected void onShowInitialInfo(Object[] args) {}
+
+    protected void onNextTurn(Object[] args) {}
+
+    protected void onTurnResults(Object[] args) {}
+
+    protected void onShowTime(Object[] args) {}
+
+    protected void onFinishGame(Object[] args) {}
 
     static class Player {
         private final String id;

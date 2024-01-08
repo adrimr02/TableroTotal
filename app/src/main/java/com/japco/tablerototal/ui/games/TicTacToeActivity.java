@@ -100,99 +100,90 @@ public class TicTacToeActivity extends AbstractGameActivity {
         }
     }
 
-    protected void addSocketListeners() {
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, args -> {
-            System.out.println(args[0]);
-            try {
-                JSONArray playersArray = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS);
-                for (int i = 0; i < playersArray.length(); i++) {
-                    JSONObject player = playersArray.getJSONObject(i);
-                    players[i] = new Player(
-                            player.getString(Constants.Keys.ID),
-                            player.getString(Constants.Keys.USERNAME),
-                            i + 1);
-                    players[i].setSymbol(player.getString(Constants.Keys.SYMBOL));
-                }
-                runOnUiThread(() -> {
-                    if (playersArray.length() >= 2) {
-                        playerNames[0].setText(players[0].getUsername());
-                        playerNames[1].setText(players[1].getUsername());
-                    }
-                    paintBoard();
-                });
-            } catch (JSONException e) {
-                e.printStackTrace();
+    @Override
+    protected void onShowInitialInfo(Object[] args) {
+        try {
+            JSONArray playersArray = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS);
+            for (int i = 0; i < playersArray.length(); i++) {
+                JSONObject player = playersArray.getJSONObject(i);
+                players[i] = new Player(
+                        player.getString(Constants.Keys.ID),
+                        player.getString(Constants.Keys.USERNAME),
+                        i + 1);
+                players[i].setSymbol(player.getString(Constants.Keys.SYMBOL));
             }
-        });
-
-        socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, args -> {
-            System.out.println(args[0]);
-            try {
-                String nextPlayer = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS).getJSONObject(0).getString(Constants.Keys.ID);
-                for (Player p : players) {
-                    if (p.getId().equals(nextPlayer)) {
-                        runOnUiThread(() -> {
-
-                        });
-                    }
+            runOnUiThread(() -> {
+                if (playersArray.length() >= 2) {
+                    playerNames[0].setText(players[0].getUsername());
+                    playerNames[1].setText(players[1].getUsername());
                 }
-                if (socketId.equals(nextPlayer)) {
-                    this.hasTurn = true;
-                    runOnUiThread(() -> Dialogs.showInfoDialog(this, R.string.got_turn_message, (dialog, ignore) -> dialog.dismiss()));
-                } else {
-                    this.hasTurn = false;
-                }
-                runOnUiThread(this::setBoardListeners);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, args -> {
-            try {
-                JSONArray board = ((JSONObject) args[0]).getJSONArray(Constants.Keys.BOARD);
-                for (int i = 0; i < board.length(); i++) {
-                    String cell = board.getString(i);
-                    if (cell == null) {
-                        this.board[i] = 0;
-                    } else {
-                        for (Player player : this.players) {
-                            if (cell.equals(player.getId())) {
-                                this.board[i] = player.getNumber();
-                            }
-                        }
-                    }
-                }
-                runOnUiThread(this::paintBoard);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
-            try {
-                int timeLeft = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
-                runOnUiThread(() -> counter.setText(String.valueOf(timeLeft)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-
-        socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, args -> {
-            System.out.println(args[0]);
-            JSONObject results = ((JSONObject) args[0]);
-            runOnUiThread(() -> showFinishGame(results));
-        });
+                paintBoard();
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    void removeSocketListeners() {
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_INITIAL_INFO);
-        socketService.getSocket().off(Constants.ServerEvents.NEXT_TURN);
-        socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
-        socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
+    protected void onNextTurn(Object[] args) {
+        try {
+            String nextPlayer = ((JSONObject) args[0]).getJSONArray(Constants.Keys.PLAYERS).getJSONObject(0).getString(Constants.Keys.ID);
+            for (Player p : players) {
+                if (p.getId().equals(nextPlayer)) {
+                    runOnUiThread(() -> {
+
+                    });
+                }
+            }
+            if (socketId.equals(nextPlayer)) {
+                this.hasTurn = true;
+                runOnUiThread(() -> Dialogs.showInfoDialog(this, R.string.got_turn_message, (dialog, ignore) -> dialog.dismiss()));
+            } else {
+                this.hasTurn = false;
+            }
+            runOnUiThread(this::setBoardListeners);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onTurnResults(Object[] args) {
+        try {
+            JSONArray board = ((JSONObject) args[0]).getJSONArray(Constants.Keys.BOARD);
+            for (int i = 0; i < board.length(); i++) {
+                String cell = board.getString(i);
+                if (cell == null) {
+                    this.board[i] = 0;
+                } else {
+                    for (Player player : this.players) {
+                        if (cell.equals(player.getId())) {
+                            this.board[i] = player.getNumber();
+                        }
+                    }
+                }
+            }
+            runOnUiThread(this::paintBoard);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onShowTime(Object[] args) {
+        try {
+            int timeLeft = ((JSONObject) args[0]).getInt(Constants.Keys.COUNTER);
+            runOnUiThread(() -> counter.setText(String.valueOf(timeLeft)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onFinishGame(Object[] args) {
+        JSONObject results = ((JSONObject) args[0]);
+        runOnUiThread(() -> showFinishGame(results));
     }
 
     private void showFinishGame(JSONObject results) {
