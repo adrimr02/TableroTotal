@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
-                throw new RuntimeException(e);
+                Dialogs.showInfoDialog(this, "No se ha podido iniciar sesión. Por favor, intentalo de nuevo.");
             }
         }
     }
@@ -98,34 +98,17 @@ public class LoginActivity extends AppCompatActivity {
                     user.setProfile(fUser.getPhotoUrl() != null ? fUser.getPhotoUrl().toString() : null);
                     System.out.println(newUser);
                     if (newUser) {
-                        usernameDialog.setContentView(R.layout.dialog_welcome);
-                        usernameDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        usernameDialog.setCancelable(false);
-                        usernameDialog.getWindow().getAttributes().windowAnimations = R.style.animation;
-
-                        EditText editUsername = usernameDialog.findViewById(R.id.editTextUsername);
-                        Button btnSaveUsername = usernameDialog.findViewById(R.id.btnSaveUsername);
-
-                        btnSaveUsername.setOnClickListener(v -> {
-                            String username = String.valueOf(editUsername.getText());
-                            if (username.trim().isEmpty()) {
-                                Dialogs.showInfoDialog(usernameDialog.getContext(), R.string.no_nickname_dialog_message);
-                            } else {
-                                user.setUsername(username);
-                                usernameDialog.dismiss();
-                                saveUser(user);
-                            }
-
-                        });
-                        System.out.println("showing dialog");
-                        usernameDialog.show();
+                        registerNewUser(user);
                     } else {
                         repository.getUser(user.getUserId(), new FirestoreRepository.OnFirestoreTaskComplete<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot result) {
-                                String username = result.getString("username");
-                                user.setUsername(username);
-                                ((MyApplication) getApplication()).setUser(user);
+                                AuthUser registeredUser = result.toObject(AuthUser.class);
+                                if (registeredUser == null || registeredUser.getUsername() == null) {
+                                    registerNewUser(user);
+                                    return;
+                                }
+                                ((MyApplication) getApplication()).setUser(registeredUser);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
@@ -141,6 +124,30 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error while signin in. Please try again", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void registerNewUser(AuthUser user) {
+        usernameDialog.setContentView(R.layout.dialog_welcome);
+        usernameDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        usernameDialog.setCancelable(false);
+        usernameDialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        EditText editUsername = usernameDialog.findViewById(R.id.editTextUsername);
+        Button btnSaveUsername = usernameDialog.findViewById(R.id.btnSaveUsername);
+
+        btnSaveUsername.setOnClickListener(v -> {
+            String username = String.valueOf(editUsername.getText());
+            if (username.trim().isEmpty()) {
+                Dialogs.showInfoDialog(usernameDialog.getContext(), R.string.no_nickname_dialog_message);
+            } else {
+                user.setUsername(username);
+                usernameDialog.dismiss();
+                saveUser(user);
+            }
+
+        });
+        System.out.println("showing dialog");
+        usernameDialog.show();
     }
 
     private void saveUser(AuthUser user) {

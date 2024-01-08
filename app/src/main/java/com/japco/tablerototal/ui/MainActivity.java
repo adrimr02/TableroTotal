@@ -71,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot result) {
                     AuthUser user = result.toObject(AuthUser.class);
+                    if (user == null || user.getUsername() == null) {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        return;
+                    }
                     ((MyApplication) getApplication()).setUser(user);
                     System.out.println("user loaded");
                     bottomNavigationView.setSelectedItemId(R.id.homeNavButton);
