@@ -30,6 +30,7 @@ public class Constants {
     public static final class ServerEvents {
         // Common
         public static final String SHOW_TIME = "show_time";
+        public static final String DISCONNECT = "disconnect";
 
         // Waiting room
         public static final String SHOW_PLAYERS_WAITING = "show_players_waiting";
@@ -40,8 +41,6 @@ public class Constants {
         public static final String NEXT_TURN = "next_turn";
         public static final String SHOW_TURN_RESULTS = "show_turn_results";
         public static final String FINISH_GAME = "finish_game";
-        public static final String MOVE_MADE = "move_made";
-        public static final String ROUND_RESULT = "round_result";
 
     }
 
