@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.MyApplication;
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
@@ -101,7 +102,7 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
 
     protected void onDisconnect(Object[] args) {
         runOnUiThread(() -> {
-            Dialogs.showInfoDialog(this, "Lost connection to server");
+            Dialogs.showInfoDialog(this, R.string.connection_lost);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });

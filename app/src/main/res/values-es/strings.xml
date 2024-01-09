@@ -65,4 +65,5 @@
     <string name="win_by_resignation_message">Tu oponente ha abandonado</string>
     <string name="lose_by_resignation_message">Has abandonado</string>
     <string name="login_subtitle">Inicia sesión para jugar:</string>
+    <string name="connection_lost">Conexión perdida</string>
 </resources>
