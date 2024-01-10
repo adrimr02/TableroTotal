@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.MyApplication;
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.AuthUser;
+import com.japco.tablerototal.ui.MainActivity;
+import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
 public abstract class AbstractGameActivity extends AppCompatActivity {
@@ -74,6 +77,8 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, this::onShowTime);
         socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, this::onFinishGame);
 
+        socketService.getSocket().on(Constants.ServerEvents.DISCONNECT, this::onDisconnect);
+
         socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
     }
     protected void removeSocketListeners() {
@@ -82,6 +87,7 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
         socketService.getSocket().off(Constants.ServerEvents.FINISH_GAME);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TURN_RESULTS);
+        socketService.getSocket().off(Constants.ServerEvents.DISCONNECT);
     }
 
     protected void onShowInitialInfo(Object[] args) {}
@@ -93,6 +99,14 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
     protected void onShowTime(Object[] args) {}
 
     protected void onFinishGame(Object[] args) {}
+
+    protected void onDisconnect(Object[] args) {
+        runOnUiThread(() -> {
+            Dialogs.showInfoDialog(this, R.string.connection_lost);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
+    }
 
     static class Player {
         private final String id;

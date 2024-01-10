@@ -5,6 +5,14 @@ plugins {
 
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('..\\tablerototal.jks')
+            storePassword 'tablerototal_sdm2324'
+            keyPassword 'tablerototal_sdm2324'
+            keyAlias 'releasekey'
+        }
+    }
     namespace 'com.japco.tablerototal'
     compileSdk 34
     buildFeatures {
@@ -27,13 +35,15 @@ android {
 
         debug {
             buildConfigField "String", SERVER_URL, CONFIG("server.url")
+            signingConfig signingConfigs.release
         }
 
         release {
             buildConfigField "String", SERVER_URL, CONFIG("server.url")
 
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
