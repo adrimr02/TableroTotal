@@ -66,4 +66,5 @@
     <string name="lose_by_resignation_message">You resigned</string>
     <string name="login_subtitle">Sign in to play with your friends:</string>
     <string name="connection_lost">Lost connection to server</string>
+    <string name="login_error">Error while signing in. Please try again.</string>
 </resources>

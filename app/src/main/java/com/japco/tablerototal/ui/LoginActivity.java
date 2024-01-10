@@ -79,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 firebaseAuth(account.getIdToken());
             } catch (ApiException e) {
-                Dialogs.showInfoDialog(this, "No se ha podido iniciar sesión. Por favor, intentalo de nuevo.");
+                e.printStackTrace();
+                Dialogs.showInfoDialog(this, R.string.login_error);
             }
         }
     }
@@ -116,12 +117,14 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onError(Exception e) {
                                 e.printStackTrace();
+                                Dialogs.showInfoDialog(LoginActivity.this, R.string.login_error);
                             }
                         });
                    }
                }
             } else {
-                Toast.makeText(this, "Error while signin in. Please try again", Toast.LENGTH_SHORT).show();
+                task.getException().printStackTrace();
+                Dialogs.showInfoDialog(this, R.string.login_error);
             }
         });
     }
@@ -146,7 +149,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
-        System.out.println("showing dialog");
         usernameDialog.show();
     }
 
@@ -162,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(Exception e) {
                 e.printStackTrace();
-                Toast.makeText(LoginActivity.this, "Error while signin in. Please try again", Toast.LENGTH_SHORT).show();
+                Dialogs.showInfoDialog(LoginActivity.this, R.string.login_error);
             }
         });
     }

@@ -66,4 +66,5 @@
     <string name="lose_by_resignation_message">Has abandonado</string>
     <string name="login_subtitle">Inicia sesión para jugar:</string>
     <string name="connection_lost">Conexión perdida</string>
+    <string name="login_error">No se ha podido iniciar sesión. Por favor, intentalo de nuevo.</string>
 </resources>
