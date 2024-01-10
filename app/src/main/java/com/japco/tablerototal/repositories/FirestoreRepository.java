@@ -55,6 +55,7 @@ public class FirestoreRepository {
 
                     match.setPlayers(players.toArray(new Match.Player[0]));
                     records.add(match);
+
                 });
                 onComplete.onSuccess(records);
             } else {

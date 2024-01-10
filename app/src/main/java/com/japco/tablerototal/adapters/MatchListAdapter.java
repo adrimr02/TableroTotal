@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.Match;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.GameMatchViewHolder> {
@@ -20,11 +21,11 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
     public interface OnItemClickListener {
         void onItemClick(Match item);
     }
-    private final List<Match> matchsList;
+    private final List<Match> matchList;
     private final OnItemClickListener listener;
 
-    public MatchListAdapter(List<Match> matchsList, OnItemClickListener listener) {
-        this.matchsList = matchsList;
+    public MatchListAdapter(List<Match> matchList, OnItemClickListener listener) {
+        this.matchList = matchList;
         this.listener = listener;
     }
 
@@ -39,14 +40,14 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
 
     @Override
     public void onBindViewHolder(@NonNull GameMatchViewHolder holder, int position) {
-        Match game = matchsList.get(position);
+        Match game = matchList.get(position);
         Log.i("Lista","Visualiza elemento: "+ game);
         holder.bindUser(game, listener);
     }
 
     @Override
     public int getItemCount() {
-        return matchsList.size();
+        return matchList.size();
     }
 
     public static class GameMatchViewHolder extends RecyclerView.ViewHolder{

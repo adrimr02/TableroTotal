@@ -45,8 +45,6 @@ public class RecordFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recordView.setLayoutManager(layoutManager);
-        MatchListAdapter matchAdapter= new MatchListAdapter(matchList, this::clickOnItem);
-        recordView.setAdapter(matchAdapter);
     }
 
     public void clickOnItem(Match match){
@@ -68,7 +66,9 @@ public class RecordFragment extends Fragment {
                 }
 
                 // TODO añadir el historial al recycler y corregir el adapter y layout
-
+                matchList = matches;
+                MatchListAdapter matchAdapter= new MatchListAdapter(matchList, RecordFragment.this::clickOnItem);
+                recordView.setAdapter(matchAdapter);
             }
 
             @Override
