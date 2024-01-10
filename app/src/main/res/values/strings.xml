@@ -65,4 +65,9 @@
     <string name="win_by_resignation_message">Your opponent resigned</string>
     <string name="lose_by_resignation_message">You resigned</string>
     <string name="login_subtitle">Sign in to play with your friends:</string>
+    <string name="connection_lost">Lost connection to server</string>
+    <string name="login_error">Error while signing in. Please try again.</string>
+    <string name="server_offline">Cannot connect to server. Please try again later.</string>
+    <string name="device_offline">You need Internet connection to continue.</string>
+    <string name="record_fetching_error">Error while fetching game record.</string>
 </resources>

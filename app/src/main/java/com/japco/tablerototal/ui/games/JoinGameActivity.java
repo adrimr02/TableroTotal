@@ -90,7 +90,7 @@ public class JoinGameActivity extends AppCompatActivity {
 
     private void connect(String roomCode, String username) {
         if (!socketService.getSocket().connected()) {
-            Dialogs.showInfoDialog(this, "No se ha podido conectar al servidor. Intentalo de nuevo.", (d, i) -> {
+            Dialogs.showInfoDialog(this, R.string.server_offline, (d, i) -> {
                 d.dismiss();
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

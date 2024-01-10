@@ -27,6 +27,7 @@ import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.repositories.FirestoreRepository;
+import com.japco.tablerototal.util.Connection;
 import com.japco.tablerototal.util.Dialogs;
 
 import java.util.Objects;
@@ -63,6 +64,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn() {
+        boolean hasConnection = new Connection(this).checkConnection();
+        if (!hasConnection) {
+            Dialogs.showInfoDialog(this, R.string.device_offline);
+            return;
+        }
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }

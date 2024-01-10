@@ -64,9 +64,8 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
 
         public void bindUser(final Match match, final OnItemClickListener listener) {
             title.setText(match.getGame());
-            date.setText(match.getDate());
-            winner.setText("Ganador: " + match.getWinner());
-            gameLogo.setImageResource(match.getImgDirectory());
+            date.setText(match.getDate().toString());
+            gameLogo.setImageResource(Match.getImg(match.getGame()));
             itemView.setOnClickListener(v -> {
                 Log.i("Hola", "Hola");
                 listener.onItemClick(match);

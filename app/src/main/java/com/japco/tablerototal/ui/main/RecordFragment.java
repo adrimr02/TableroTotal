@@ -12,9 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.japco.tablerototal.MyApplication;
 import com.japco.tablerototal.R;
 import com.japco.tablerototal.adapters.MatchListAdapter;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.model.Match;
+import com.japco.tablerototal.repositories.FirestoreRepository;
+import com.japco.tablerototal.util.Dialogs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,8 @@ public class RecordFragment extends Fragment {
 
     List<Match> matchList;
     RecyclerView recordView;
+
+    FirestoreRepository repo = new FirestoreRepository();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,11 +58,24 @@ public class RecordFragment extends Fragment {
         //startActivity(intent);
     }
 
-    private void fillMatchList(){
-        matchList = new ArrayList<>();
-        matchList.add(new Match("12/10/2023 10:33","Piedra, Papel o Tijera", "Reih1", R.drawable.piedrapapeltijera));
-        matchList.add(new Match("18/10/2023 11:04","Tres en Raya", "SamuDestroyer", R.drawable.tresenraya));
-        matchList.add(new Match("21/10/2023 20:23","Pares o Nones", "GodAtarash1", R.drawable.paresnones));
-        matchList.add(new Match("24/10/2023 11:11","Piedra, Papel o Tijera", "Depredador07", R.drawable.piedrapapeltijera));
+    private void fillMatchList() {
+        AuthUser user = ((MyApplication) requireActivity().getApplication()).getUser();
+        repo.getHistory(user.getUserId(), new FirestoreRepository.OnFirestoreTaskComplete<List<Match>>() {
+            @Override
+            public void onSuccess(List<Match> matches) {
+                for (Match match : matches) {
+                    System.out.println(match);
+                }
+
+                // TODO añadir el historial al recycler y corregir el adapter y layout
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+                Dialogs.showInfoDialog(requireActivity(), R.string.record_fetching_error);
+            }
+        });
     }
 }
