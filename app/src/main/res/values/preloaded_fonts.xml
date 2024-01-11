@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/alata</item>
+        <item>@font/alatsi</item>
+        <item>@font/alef</item>
+        <item>@font/allerta</item>
+        <item>@font/anonymous_pro</item>
         <item>@font/archivo_semibold</item>
+        <item>@font/arimo</item>
+        <item>@font/cantarell</item>
     </array>
 </resources>
