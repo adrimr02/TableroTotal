@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EvensAndNonesActivity extends AbstractGameActivity {
 
     Button btPares;
@@ -171,14 +174,35 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
     @Override
     protected void onFinishGame(Object[] args) {
         try {
+            List<String> winners = new ArrayList<String>();
+            String message = "";
             JSONObject obj = (JSONObject) args[0];
-            String winner = obj.getString(Constants.Keys.WINNER);
+            JSONArray winner = obj.getJSONArray(Constants.Keys.WINNER);
+            for(int i = 0; i < winner.length(); i++){
+                String name = winner.getString(i);
+                winners.add(name);
+            }
+
             int winnerPoints = obj.getInt(Constants.Keys.POINTS);
 
-            String message = "¡" + winner + " ha ganado la partida con "
-                    + winnerPoints + " puntos!";
+            if(winners.size() > 1){
+                message = "¡";
+                for(int i = 0; i < winners.size(); i++){
+                    message += winner.get(i);
+                    if(i < winners.size()-2){
+                        message+=", ";
+                    } else if(i == winners.size()-2) {
+                        message+=" " + getString(R.string.Y) + " ";
+                    }
+                }
+                message+=" " + getString(R.string.tie) + " " + winnerPoints + " " + getString(R.string.match_points) + "!";
+            } else {
+                message = "¡" + winners.get(0) + " " + getString(R.string.has_won_the_match) + " "
+                        + winnerPoints + " " + getString(R.string.match_points) + "!";
+            }
 
-            runOnUiThread(() -> Dialogs.showInfoDialog(this, message, (dialog, which) -> {
+            String finalMessage = message;
+            runOnUiThread(() -> Dialogs.showInfoDialog(this, finalMessage, (dialog, which) -> {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             }));

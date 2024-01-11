@@ -72,4 +72,7 @@
     <string name="record_fetching_error">Error al cargar el historial de partidas</string>
     <string name="Empate">Empate entre</string>
     <string name="Y">y</string>
+    <string name="has_won_the_match">ha ganado la partida con</string>
+    <string name="match_points">puntos</string>
+    <string name="tie">empatados por</string>
 </resources>
