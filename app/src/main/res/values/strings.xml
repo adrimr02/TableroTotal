@@ -18,7 +18,7 @@
     <string name="opponent">Opponent</string>
     <string name="newGame">New Game</string>
     <string name="go_back">Back</string>
-    <string name="TicTacToe">TicTacToe</string>
+    <string name="TicTacToe">Tic Tac Toe</string>
     <string name="RPS">Rock, Paper, Scissors</string>
     <string name="EvensAndNones">Odds and Evens</string>
     <string name="game_date">23/10/2023</string>
@@ -70,4 +70,6 @@
     <string name="server_offline">Cannot connect to server. Please try again later.</string>
     <string name="device_offline">You need Internet connection to continue.</string>
     <string name="record_fetching_error">Error while fetching game record.</string>
+    <string name="Empate">Draw between</string>
+    <string name="Y">and</string>
 </resources>

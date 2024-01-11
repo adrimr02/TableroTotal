@@ -39,21 +39,17 @@ public class RecordFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        fillMatchList();
         recordView = view.findViewById(R.id.recyclerViewRecord);
         recordView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recordView.setLayoutManager(layoutManager);
+
+        fillMatchList();
     }
 
     public void clickOnItem(Match match){
         Log.i("Click adapter","Item Clicked "+match.getGame());
-        //Toast.makeText(MainActivity.this, "Item Clicked "+user.getId(), Toast.LENGTH_LONG).show();
-        //Intent intent=new Intent (MainRecycler.this, MainActivity.class);
-        //intent.putExtra(MATCH_SELECTED, match);
-        //Poner algo de transacciones ???
-        //startActivity(intent);
     }
 
     private void fillMatchList() {
@@ -65,10 +61,10 @@ public class RecordFragment extends Fragment {
                     System.out.println(match);
                 }
 
-                // TODO añadir el historial al recycler y corregir el adapter y layout
                 matchList = matches;
                 MatchListAdapter matchAdapter= new MatchListAdapter(matchList, RecordFragment.this::clickOnItem);
                 recordView.setAdapter(matchAdapter);
+
             }
 
             @Override

@@ -1,5 +1,6 @@
 package com.japco.tablerototal.adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.Match;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -55,6 +55,7 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
         private final TextView date;
         private final TextView winner;
         private final ImageView gameLogo;
+
         public GameMatchViewHolder(View itemView) {
             super(itemView);
             title= itemView.findViewById(R.id.gametitle);
@@ -64,13 +65,39 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.Game
         }
 
         public void bindUser(final Match match, final OnItemClickListener listener) {
-            title.setText(match.getGame());
-            date.setText(match.getDate().toString());
+            Context context = winner.getContext();
+
+            title.setText(context.getString(Match.getGame(match.getGame())));
+            date.setText(match.getDate());
             gameLogo.setImageResource(Match.getImg(match.getGame()));
+            winner.setText(winnersToString(match.getWinners(), context));
+
             itemView.setOnClickListener(v -> {
-                Log.i("Hola", "Hola");
+                Log.i("Partida", "Partida pulsada");
                 listener.onItemClick(match);
             });
+        }
+
+        private String winnersToString(List<Match.Player> winners, Context context){
+            String and = context.getString(R.string.Y);
+            String result = "";
+
+            if(winners.size() > 1){
+                result = context.getString(R.string.Empate) + " ";
+            }
+
+            for(int i = 0; i < winners.size(); i++){
+                result += winners.get(i).username;
+
+                if(i < winners.size()-2){
+                    result += ", ";
+                } else if(i == winners.size()-2){
+                    result += " " + and + " ";
+                }
+
+            }
+
+            return result;
         }
     }
 }

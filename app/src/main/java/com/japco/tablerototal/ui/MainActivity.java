@@ -49,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.recordNavButton) {
                 replaceFragment(recordFragment);
                 return true;
-            } else if (item.getItemId() == R.id.friendsNavButton) {
+            } /* else if (item.getItemId() == R.id.friendsNavButton) {
                 replaceFragment(friendsFragment);
                 return true;
-            }
+            }*/
             return false;
         });
     }

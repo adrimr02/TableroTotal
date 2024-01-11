@@ -10,6 +10,8 @@ import com.google.type.DateTime;
 import com.japco.tablerototal.Constants;
 import com.japco.tablerototal.R;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -27,26 +29,33 @@ public class Match implements Parcelable {
             throw new IllegalArgumentException("Invalid game");
         }
     }
+    public static int getGame(String game) {
+        if (game.equals(Constants.GAMES[0])) {
+            return R.string.RPS;
+        } else if (game.equals(Constants.GAMES[1])) {
+            return R.string.TicTacToe;
+        } else if (game.equals(Constants.GAMES[2])) {
+            return R.string.EvensAndNones;
+        } else {
+            throw new IllegalArgumentException("Invalid game");
+        }
+    }
 
-    private Date date;
+    private String date;
     private String game;
     private Player[] players;
-
-    public Match(Date date, String game, Player[] players) {
-        this.date = date;
-        this.game = game;
-        this.players = players;
-    }
 
     public Match() {}
 
     protected Match(Parcel in) {
+        SimpleDateFormat formatoFechaHora = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
         this.game = in.readString();
-        this.date = (Date) in.readSerializable();
+        this.date = formatoFechaHora.format((Date) in.readSerializable());
         this.players = (Player[]) in.readParcelableArray(Player.class.getClassLoader());
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -55,7 +64,8 @@ public class Match implements Parcelable {
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        SimpleDateFormat formatoFechaHora = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        this.date = formatoFechaHora.format(date);
     }
 
     public void setGame(String game) {
@@ -69,6 +79,25 @@ public class Match implements Parcelable {
 
     public Player[] getPlayers() {
         return players;
+    }
+
+    public List<Player> getWinners(){
+        int points = 0;
+        List<Player> winners = new ArrayList<Player>();
+
+        for(Player player: players){
+            if(player.points > points){
+                points = player.points;
+            }
+        }
+
+        for(Player player: players){
+            if(player.points == points){
+                winners.add(player);
+            }
+        }
+
+        return winners;
     }
 
     public void setPlayers(Player[] players) {

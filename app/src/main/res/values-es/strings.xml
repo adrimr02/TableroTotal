@@ -20,7 +20,7 @@
     <string name="newGame">Nuevo juego</string>
     <string name="go_back">Atras</string>
     <string name="TicTacToe">Tres en Raya</string>
-    <string name="RPS">Piedra, papel o tijera</string>
+    <string name="RPS">Piedra, Papel o Tijera</string>
     <string name="EvensAndNones">Pares o Nones</string>
     <string name="game_date">23/10/2023 9:30</string>
     <string name="game_title">Piedra, papel o tijera</string>
@@ -70,4 +70,6 @@
     <string name="server_offline">No se pudo conectar con el servidor. Inténtalo más tarde.</string>
     <string name="device_offline">Necesitas conexión a Internet para continuar.</string>
     <string name="record_fetching_error">Error al cargar el historial de partidas</string>
+    <string name="Empate">Empate entre</string>
+    <string name="Y">y</string>
 </resources>
