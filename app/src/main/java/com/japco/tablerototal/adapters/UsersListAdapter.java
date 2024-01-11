@@ -21,11 +21,9 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         void onItemClick(User item);
     }
     private List<User> usersList;
-    private final UsersListAdapter.OnItemClickListener listener;
 
-    public UsersListAdapter(List<User> usersList, UsersListAdapter.OnItemClickListener listener) {
+    public UsersListAdapter(List<User> usersList) {
         this.usersList = usersList;
-        this.listener = listener;
     }
 
     @NonNull
@@ -41,7 +39,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     public void onBindViewHolder(@NonNull UsersListAdapter.UserViewHolder holder, int position) {
         User user = usersList.get(position);
         Log.i("Lista","Visualiza elemento: "+ user);
-        holder.bindUser(user, listener);
+        holder.bindUser(user);
     }
 
     @Override
@@ -60,11 +58,10 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
             userPicture = itemView.findViewById(R.id.userPicture);
         }
 
-        public void bindUser(final User user, final UsersListAdapter.OnItemClickListener listener) {
+        public void bindUser(final User user) {
             nickname.setText(user.getNickname());
             state.setText(user.getState());
             userPicture.setImageResource(R.drawable.contacto);
-            itemView.setOnClickListener(v -> listener.onItemClick(user));
         }
     }
 
