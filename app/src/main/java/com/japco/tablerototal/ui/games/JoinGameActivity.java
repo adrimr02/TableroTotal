@@ -57,12 +57,13 @@ public class JoinGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_join_game);
 
         authUser = ((MyApplication) getApplication()).getUser();
-
+        Button backButton = findViewById(R.id.buttonBack);
         Button joinButton = findViewById(R.id.buttonJoin);
         codeField = findViewById(R.id.gameCodeField);
         TextView textUsername = findViewById(R.id.textUsername);
 
         textUsername.setText(authUser.getUsername());
+        backButton.setOnClickListener(v -> finish());
 
         joinButton.setOnClickListener(v -> {
             if (codeField.getText().toString().trim().length() != 6) {

@@ -55,23 +55,22 @@
 
     <Button
         android:id="@+id/buttonCreateGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_width="191dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/custom_botoncreate"
         android:text="@string/button_create_game"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeNameField" />
 
     <Button
         android:id="@+id/buttonJoinGame"
-        android:layout_width="180dp"
-        android:layout_height="53dp"
+        android:layout_width="191dp"
+        android:layout_height="56dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_boton_naraja"
         android:text="@string/button_join_game"
@@ -80,10 +79,9 @@
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreateGame"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.018" />
 
     <Button
         android:id="@+id/btnLogout"
@@ -96,7 +94,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/homeTextTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.051"
+        app:layout_constraintHorizontal_bias="0.036"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.307" />
