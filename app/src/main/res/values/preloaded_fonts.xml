@@ -9,5 +9,7 @@
         <item>@font/archivo_semibold</item>
         <item>@font/arimo</item>
         <item>@font/cantarell</item>
+        <item>@font/roboto_bold</item>
+        <item>@font/roboto_mono_bold</item>
     </array>
 </resources>
