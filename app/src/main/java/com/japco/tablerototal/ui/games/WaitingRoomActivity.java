@@ -100,7 +100,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         connectedUsersView.setLayoutManager(layoutManager);
-        usersAdapter= new UsersListAdapter(connectedUsers, this::clickOnItem);
+        usersAdapter= new UsersListAdapter(connectedUsers);
         connectedUsersView.setAdapter(usersAdapter);
 
         listo.setOnClickListener(v -> updateReadyState());
@@ -109,6 +109,12 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         volver.setOnClickListener(v -> moveToMainActivity());
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveToMainActivity();
+        super.onBackPressed();
     }
 
     private void moveToMainActivity() {
@@ -147,14 +153,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
         mBound = false;
     }
 
-    public void clickOnItem(User user){
-        Log.i("Click adapter","Item Clicked "+user.getNickname());
-        //Toast.makeText(MainActivity.this, "Item Clicked "+user.getId(), Toast.LENGTH_LONG).show();
-        //Intent intent=new Intent (MainRecycler.this, MainActivity.class);
-        //intent.putExtra(MATCH_SELECTED, match);
-        //Poner algo de transacciones ???
-        //startActivity(intent);
-    }
 
     private void addListeners(){
 
