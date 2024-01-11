@@ -35,8 +35,6 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
             socketService = binder.getService();
             socketId = socketService.getSocket().id();
             addSocketListeners();
-            // Notify server when client is ready
-            socketService.getSocket().emit(Constants.ClientEvents.CLIENT_READY);
         }
 
         @Override
@@ -71,10 +69,10 @@ public abstract class AbstractGameActivity extends AppCompatActivity {
         // Make sure waiting room show time listener is removed
         socketService.getSocket().off(Constants.ServerEvents.SHOW_TIME);
 
+        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, this::onShowTime);
         socketService.getSocket().on(Constants.ServerEvents.SHOW_INITIAL_INFO, this::onShowInitialInfo);
         socketService.getSocket().on(Constants.ServerEvents.NEXT_TURN, this::onNextTurn);
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TURN_RESULTS, this::onTurnResults);
-        socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, this::onShowTime);
         socketService.getSocket().on(Constants.ServerEvents.FINISH_GAME, this::onFinishGame);
 
         socketService.getSocket().on(Constants.ServerEvents.DISCONNECT, this::onDisconnect);
