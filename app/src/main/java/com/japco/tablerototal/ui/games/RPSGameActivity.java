@@ -101,7 +101,7 @@ public class RPSGameActivity extends AbstractGameActivity {
             JSONObject info = (JSONObject) args[0];
             System.out.println(info);
 
-            int round = info.getInt(Constants.Keys.ROUND) + 1;
+            int round = info.getInt(Constants.Keys.ROUND) + 2;
 
             // Obtén los puntos de cada jugador del objeto 'points'
             JSONObject pointsObject = info.getJSONObject(Constants.Keys.POINTS);
@@ -128,7 +128,7 @@ public class RPSGameActivity extends AbstractGameActivity {
                 }
 
                 System.out.println(info.optString(Constants.Keys.WINNER));
-//                    showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
+//              showRoundWinner(info.optString(Constants.Keys.WINNER)); // Use the actual winner ID from the response
             });
 
         } catch (JSONException e) {
