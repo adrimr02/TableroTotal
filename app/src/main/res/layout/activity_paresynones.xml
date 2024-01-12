@@ -114,9 +114,10 @@
 
     <TextView
         android:id="@+id/txTiempoRonda"
-        android:layout_width="84dp"
-        android:layout_height="60dp"
+        android:layout_width="116dp"
+        android:layout_height="67dp"
         android:fontFamily="@font/cantarell"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="48sp"
         app:layout_constraintBottom_toTopOf="@+id/titleTextView"
@@ -124,7 +125,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.822" />
+        app:layout_constraintVertical_bias="0.801" />
 
     <TextView
         android:id="@+id/txPuntos"

@@ -186,7 +186,7 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
             int winnerPoints = obj.getInt(Constants.Keys.POINTS);
 
             if(winners.size() > 1){
-                message = "¡";
+                message = getString(R.string.exclamation);
                 for(int i = 0; i < winners.size(); i++){
                     message += winner.get(i);
                     if(i < winners.size()-2){
@@ -197,7 +197,7 @@ public class EvensAndNonesActivity extends AbstractGameActivity {
                 }
                 message+=" " + getString(R.string.tie) + " " + winnerPoints + " " + getString(R.string.match_points) + "!";
             } else {
-                message = "¡" + winners.get(0) + " " + getString(R.string.has_won_the_match) + " "
+                message = getString(R.string.exclamation) + winners.get(0) + " " + getString(R.string.has_won_the_match) + " "
                         + winnerPoints + " " + getString(R.string.match_points) + "!";
             }
 

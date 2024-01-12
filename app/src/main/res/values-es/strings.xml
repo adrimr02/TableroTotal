@@ -75,4 +75,5 @@
     <string name="has_won_the_match">ha ganado la partida con</string>
     <string name="match_points">puntos</string>
     <string name="tie">empatados por</string>
+    <string name="exclamation">¡</string>
 </resources>

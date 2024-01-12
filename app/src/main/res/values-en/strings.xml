@@ -75,4 +75,5 @@
     <string name="has_won_the_match">has won the match with</string>
     <string name="match_points">points</string>
     <string name="tie">tied by</string>
+    <string name="exclamation">" "</string>
 </resources>
