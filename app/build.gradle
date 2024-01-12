@@ -1,9 +1,18 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('..\\tablerototal.jks')
+            storePassword 'tablerototal_sdm2324'
+            keyPassword 'tablerototal_sdm2324'
+            keyAlias 'releasekey'
+        }
+    }
     namespace 'com.japco.tablerototal'
     compileSdk 34
     buildFeatures {
@@ -26,13 +35,15 @@ android {
 
         debug {
             buildConfigField "String", SERVER_URL, CONFIG("server.url")
+            signingConfig signingConfigs.release
         }
 
         release {
             buildConfigField "String", SERVER_URL, CONFIG("server.url")
 
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -54,6 +65,14 @@ dependencies {
         // excluding org.json which is provided by Android
         exclude group: 'org.json', module: 'json'
     }
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation 'com.google.firebase:firebase-auth'
+    implementation("com.google.firebase:firebase-firestore")
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

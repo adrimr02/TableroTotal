@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/custom_background"
     android:importantForAutofill="no"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <TextView
         android:id="@+id/homeTextTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
+        android:fontFamily="@font/alata"
         android:text="@string/home_title"
         android:textColor="@color/white"
         android:textSize="48sp"
@@ -20,16 +21,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/homeNameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:allowUndo="false"
         android:autofillHints="username"
         android:backgroundTint="@color/white"
+        android:clickable="false"
         android:ems="10"
-        android:hint="@string/username_field"
-        android:inputType="text"
+        android:enabled="false"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -53,34 +55,48 @@
 
     <Button
         android:id="@+id/buttonCreateGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_width="191dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/custom_botoncreate"
-        app:backgroundTint="@null"
         android:text="@string/button_create_game"
         android:textColor="@color/white"
         android:textSize="24sp"
+        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeNameField" />
 
     <Button
         android:id="@+id/buttonJoinGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="191dp"
+        android:layout_height="56dp"
         android:layout_marginTop="40dp"
         android:background="@drawable/custom_boton_naraja"
-        app:backgroundTint="@null"
         android:text="@string/button_join_game"
         android:textColor="@color/white"
         android:textSize="24sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreateGame"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.018" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFF0000"
+        android:text="@string/logout"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/homeTextTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.036"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

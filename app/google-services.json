@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "98280711540",
+    "firebase_url": "https://tablerototal-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tablerototal",
+    "storage_bucket": "tablerototal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98280711540:android:458498c97354ec52677821",
+        "android_client_info": {
+          "package_name": "com.japco.tablerototal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98280711540-lq808t4vbqfo0tuo3c4pqf8q0aqjd597.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.japco.tablerototal",
+            "certificate_hash": "c93a55dbad168e6eb2a73a1779a27e09aff29578"
+          }
+        },
+        {
+          "client_id": "98280711540-fsf31d7fpcc9vn3a1rnqglurq1bhp5qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoEQGjCWcPFr5fNWjieDmeifyooJd71h8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98280711540-fsf31d7fpcc9vn3a1rnqglurq1bhp5qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,7 @@ public class Constants {
     public static final String[] GAMES = new String[] { "rock_paper_scissors", "tic_tac_toe", "even_odd" };
     public static final String USERNAME_EXTRA = "username";
     public static final String SERVER_URL = BuildConfig.SERVER_URL;
-    //public static final String SERVER_URL = "https://wws0z5kh-3000.uks1.devtunnels.ms/L";
+    //public static final String SERVER_URL = "https://86jwcf1q-3000.uks1.devtunnels.ms/";
     public static final String STATUS_OK = "ok";
     public static final String STATUS_ERROR = "error";
     public static final String NOT_ENOUGHT_PLAYERS = "not_enough_players";
@@ -30,6 +30,7 @@ public class Constants {
     public static final class ServerEvents {
         // Common
         public static final String SHOW_TIME = "show_time";
+        public static final String DISCONNECT = "disconnect";
 
         // Waiting room
         public static final String SHOW_PLAYERS_WAITING = "show_players_waiting";
@@ -40,8 +41,6 @@ public class Constants {
         public static final String NEXT_TURN = "next_turn";
         public static final String SHOW_TURN_RESULTS = "show_turn_results";
         public static final String FINISH_GAME = "finish_game";
-        public static final String MOVE_MADE = "move_made";
-        public static final String ROUND_RESULT = "round_result";
 
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/custom_background"
-    tools:context=".NewGameActivity">
+    tools:context=".ui.games.NewGameActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -14,6 +14,7 @@
         android:layout_marginStart="88dp"
         android:layout_marginTop="104dp"
         android:layout_marginEnd="88dp"
+        android:fontFamily="@font/alata"
         android:text="@string/newGame"
         android:textColor="@color/white"
         android:textSize="48sp"
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/danger"
+        android:fontFamily="@font/cantarell"
         android:paddingLeft="12dp"
         android:paddingTop="3dp"
         android:paddingRight="12dp"
@@ -102,7 +104,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roundsLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/roundsLabel"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/roundsLabel"
@@ -114,21 +117,23 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/roundsSeekBar"
-        app:layout_constraintTop_toBottomOf="@+id/oddsEvensButton" />
+        app:layout_constraintTop_toBottomOf="@+id/oddsEvensButton"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/buttonConfirmGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_botoncreate"
-        app:backgroundTint="@null"
+        android:fontFamily="@font/cantarell"
         android:text="@string/button_create_game"
         android:textColor="@color/white"
         android:textSize="34sp"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roundsSeekBar"
-        app:layout_constraintVertical_bias="0.37" />
+        app:layout_constraintTop_toBottomOf="@+id/oddsEvensButton"
+        app:layout_constraintVertical_bias="0.688" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

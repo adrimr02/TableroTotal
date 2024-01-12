@@ -1,8 +1,4 @@
-package com.japco.tablerototal;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.japco.tablerototal.ui.games;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,8 +11,18 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.japco.tablerototal.Constants;
+import com.japco.tablerototal.MyApplication;
+import com.japco.tablerototal.R;
+import com.japco.tablerototal.adapters.UsersListAdapter;
+import com.japco.tablerototal.model.AuthUser;
 import com.japco.tablerototal.model.User;
+import com.japco.tablerototal.ui.MainActivity;
 import com.japco.tablerototal.util.Dialogs;
 import com.japco.tablerototal.util.SocketService;
 
@@ -24,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class WaitingRoomActivity extends AppCompatActivity {
@@ -40,7 +45,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         6- Avisar cuando no haya suficientes jugadores
      */
 
-    List<User> connectedUsers = new ArrayList<>();
+    final List<User> connectedUsers = new ArrayList<>();
     UsersListAdapter usersAdapter;
     String roomCode;
     String game;
@@ -52,7 +57,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
     TextView cronometro;
     TextView codigo;
     boolean mBound;
-    String username;
+    AuthUser authUser;
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -80,10 +85,11 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         this.roomCode = getIntent().getStringExtra("roomCode");
         this.game = getIntent().getStringExtra("game");
-        this.username = getIntent().getStringExtra("username");
+
+        authUser = ((MyApplication) getApplication()).getUser();
 
         volver = findViewById(R.id.btAtras);
-        connectedUsersView = (RecyclerView)findViewById(R.id.rcylConnectedUsers);
+        connectedUsersView = findViewById(R.id.rcylConnectedUsers);
         cronometro = findViewById(R.id.txContador);
         listo = findViewById(R.id.btListo);
         codigo = findViewById(R.id.txCodigo);
@@ -94,27 +100,21 @@ public class WaitingRoomActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         connectedUsersView.setLayoutManager(layoutManager);
-        usersAdapter= new UsersListAdapter(connectedUsers,
-                new UsersListAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(User item) {
-                        clickOnItem(item);
-                    }
-                });
+        usersAdapter= new UsersListAdapter(connectedUsers);
         connectedUsersView.setAdapter(usersAdapter);
 
-        listo.setOnClickListener(v -> {
-            updateReadyState();
-        });
+        listo.setOnClickListener(v -> updateReadyState());
 
-        compartir.setOnClickListener(v -> {
-            compartirCodigo();
-        });
+        compartir.setOnClickListener(v -> compartirCodigo());
 
-        volver.setOnClickListener(v -> {
-            moveToMainActivity();
-        });
+        volver.setOnClickListener(v -> moveToMainActivity());
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveToMainActivity();
+        super.onBackPressed();
     }
 
     private void moveToMainActivity() {
@@ -153,14 +153,6 @@ public class WaitingRoomActivity extends AppCompatActivity {
         mBound = false;
     }
 
-    public void clickOnItem(User user){
-        Log.i("Click adapter","Item Clicked "+user.getNickname());
-        //Toast.makeText(MainActivity.this, "Item Clicked "+user.getId(), Toast.LENGTH_LONG).show();
-        //Intent intent=new Intent (MainRecycler.this, MainActivity.class);
-        //intent.putExtra(MATCH_SELECTED, match);
-        //Poner algo de transacciones ???
-        //startActivity(intent);
-    }
 
     private void addListeners(){
 
@@ -168,9 +160,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         socketService.getSocket().on(Constants.ServerEvents.SHOW_TIME, args -> {
             try {
                 int counter = ((JSONObject) args[0]).getInt("counter");
-                runOnUiThread(() -> {
-                    cronometro.setText(counter + "s");
-                });
+                runOnUiThread(() -> cronometro.setText(counter + "s"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -198,9 +188,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
                             state, null));
                 }
 
-                runOnUiThread(() -> {
-                    usersAdapter.setUsersList(connectedUsers);
-                });
+                runOnUiThread(() -> usersAdapter.setUsersList(connectedUsers));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -208,22 +196,16 @@ public class WaitingRoomActivity extends AppCompatActivity {
         });
 
         //Pasa a la partida si comienza el juego
-        socketService.getSocket().on(Constants.ServerEvents.START_GAME, args -> {
-            enterGameView();
-        });
+        socketService.getSocket().on(Constants.ServerEvents.START_GAME, args -> enterGameView());
 
         //Cancela si no se cumplen las condiciones para iniciar partida
         socketService.getSocket().on("error", args -> {
             try {
                 String errorMsg = ((JSONObject) args[0]).getString("code");
                 if(errorMsg.equals(Constants.NOT_ENOUGHT_PLAYERS)){
-                    runOnUiThread(() -> {
-                        Dialogs.showInfoDialog(WaitingRoomActivity.this,
-                                getString(R.string.not_enough_players),
-                                (DialogInterface dialog, int id) -> {
-                            moveToMainActivity();
-                        });
-                    });
+                    runOnUiThread(() -> Dialogs.showInfoDialog(WaitingRoomActivity.this,
+                            getString(R.string.not_enough_players),
+                            (DialogInterface dialog, int id) -> moveToMainActivity()));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -260,7 +242,7 @@ public class WaitingRoomActivity extends AppCompatActivity {
         } else {
             return;
         }
-        intent.putExtra("username", username);
+
         startActivity(intent);
     }
 }

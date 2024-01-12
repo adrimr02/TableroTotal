@@ -1,4 +1,4 @@
-package com.japco.tablerototal;
+package com.japco.tablerototal.adapters;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.japco.tablerototal.model.Friend;
+import com.japco.tablerototal.R;
 import com.japco.tablerototal.model.User;
 
 import java.util.List;
@@ -21,11 +21,9 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         void onItemClick(User item);
     }
     private List<User> usersList;
-    private final UsersListAdapter.OnItemClickListener listener;
 
-    public UsersListAdapter(List<User> usersList, UsersListAdapter.OnItemClickListener listener) {
+    public UsersListAdapter(List<User> usersList) {
         this.usersList = usersList;
-        this.listener = listener;
     }
 
     @NonNull
@@ -41,7 +39,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     public void onBindViewHolder(@NonNull UsersListAdapter.UserViewHolder holder, int position) {
         User user = usersList.get(position);
         Log.i("Lista","Visualiza elemento: "+ user);
-        holder.bindUser(user, listener);
+        holder.bindUser(user);
     }
 
     @Override
@@ -50,25 +48,20 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder{
-        private TextView nickname;
-        private TextView state;
-        private ImageView userPicture;
+        private final TextView nickname;
+        private final TextView state;
+        private final ImageView userPicture;
         public UserViewHolder(View itemView) {
             super(itemView);
-            nickname= (TextView)itemView.findViewById(R.id.nickname);
-            state= (TextView)itemView.findViewById(R.id.state);
-            userPicture = (ImageView)itemView.findViewById(R.id.userPicture);
+            nickname= itemView.findViewById(R.id.nickname);
+            state= itemView.findViewById(R.id.state);
+            userPicture = itemView.findViewById(R.id.userPicture);
         }
 
-        public void bindUser(final User user, final UsersListAdapter.OnItemClickListener listener) {
+        public void bindUser(final User user) {
             nickname.setText(user.getNickname());
             state.setText(user.getState());
             userPicture.setImageResource(R.drawable.contacto);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(user);
-                }
-            });
         }
     }
 
